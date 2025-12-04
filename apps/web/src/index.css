@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global styles for Apple-inspired design */
+@layer base {
+  html {
+    @apply font-sans;
+  }
+  body {
+    @apply bg-white text-gray-900;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans text-black;
+  }
+}
