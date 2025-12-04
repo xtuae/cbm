@@ -4,8 +4,8 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import WishlistButton from '../components/WishlistButton';
 import { EmptyMarketplace } from '../components/EmptyState';
-import { ProductGridSkeleton } from '../components/Skeletons';
-import ErrorMessage, { getErrorConfig } from '../components/ErrorMessage';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
 
 interface Category {
   id: string;
@@ -251,7 +251,7 @@ const BrowseMarketplace = () => {
             </div>
           </div>
           {/* Product Grid Skeleton */}
-          <ProductGridSkeleton columns={4} />
+          <LoadingState type="products" columns={4} />
         </div>
       </div>
     );
@@ -271,72 +271,65 @@ const BrowseMarketplace = () => {
         </div>
       </header>
 
-      <div className="max-w-[1200px] mx-auto px-6 lg:px-8">
-        {/* Clean Toolbar Row */}
-        <div className="bg-gray-light-50 rounded-large p-6 mb-12">
-          {/* Search Box */}
-          <div className="mb-8">
-            <div className="relative max-w-md">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <svg className="h-5 w-5 text-gray-light-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-              <input
-                type="text"
-                placeholder="Search credit packs..."
-                className="block w-full pl-12 pr-4 py-3 bg-white border border-gray-light-300 rounded-large placeholder-gray-light-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-                value={searchTerm}
-                onChange={handleSearchChange}
-              />
+        <div className="container-max">
+          {/* Toolbar Row */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-8">
+            {/* Category Dropdown */}
+            <div className="flex-1 max-w-xs">
+              <select
+                value={selectedCategory || 'all'}
+                onChange={(e) => {
+                  handleCategorySelect(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="select w-full"
+              >
+                <option value="all">All Categories</option>
+                {categories.slice(1).map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
             </div>
-          </div>
 
-          {/* Category Selector and Sort */}
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            {/* Category Chips */}
-            <div className="flex flex-wrap gap-3">
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => {
-                    handleCategorySelect(category.id);
-                    setCurrentPage(1);
-                  }}
-                  className={`px-5 py-2 rounded-large text-sm font-medium transition-all ${
-                    (selectedCategory === category.id) || (category.id === 'all' && !selectedCategory)
-                      ? 'bg-primary text-white shadow-subtle'
-                      : 'bg-gray-light-100 text-gray-light-600 hover:bg-gray-light-200'
-                  }`}
-                >
-                  {category.name}
-                </button>
-              ))}
+            {/* Search Input */}
+            <div className="flex-1 max-w-md">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search credit packs..."
+                  className="input pl-10 w-full"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
+              </div>
             </div>
 
             {/* Sort Dropdown */}
-            <div className="relative">
+            <div className="flex-1 max-w-xs">
               <select
                 value={sortBy}
                 onChange={(e) => {
                   handleSortChange(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="appearance-none bg-white border border-gray-light-300 rounded-large px-5 py-2 pr-10 text-sm font-medium text-gray-light-600 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                className="select w-full"
               >
                 <option value="recommended">Recommended</option>
                 <option value="price_asc">Price: Low to High</option>
                 <option value="price_desc">Price: High to Low</option>
                 <option value="newest">Newest</option>
               </select>
-              <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-light-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
-              </svg>
             </div>
           </div>
-        </div>
 
-        {/* Large Product Grid */}
+          {/* Product Grid */}
         {totalCount === 0 ? (
           searchTerm || selectedCategory ? (
             // No results for search/filter
@@ -363,12 +356,12 @@ const BrowseMarketplace = () => {
           )
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {getPaginatedProducts().map((pack) => (
-                <div key={pack.id} className="bg-white rounded-large border border-gray-light-200 overflow-hidden shadow-card hover:shadow-card transition-shadow group">
-                  {/* Featured Image Placeholder */}
-                  <div className="aspect-square bg-gradient-to-br from-primary/5 to-primary/10 flex items-center justify-center relative">
-                    <svg className="w-16 h-16 text-primary/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div key={pack.id} className="card group hover:shadow-elevated hover:border-gray-300 transition-all duration-200">
+                  {/* Image */}
+                  <div className="aspect-square bg-gradient-to-br from-primary/5 to-primary/10 flex items-center justify-center relative overflow-hidden">
+                    <svg className="w-16 h-16 text-primary/70 group-hover:scale-110 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     {/* Wishlist Button Overlay */}
@@ -376,33 +369,33 @@ const BrowseMarketplace = () => {
                       creditPackId={pack.id}
                       variant="overlay"
                       size="sm"
-                      className="absolute top-4 right-4"
+                      className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                     />
                   </div>
 
                   {/* Product Info */}
                   <div className="p-6">
-                    {/* Category Chips */}
+                    {/* Category Badges */}
                     {pack.categories && pack.categories.length > 0 && (
                       <div className="flex flex-wrap gap-2 mb-4">
                         {pack.categories.slice(0, 2).map((category) => (
                           <span
                             key={category.id}
-                            className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-light-100 text-gray-light-700"
+                            className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700"
                           >
                             {category.name}
                           </span>
                         ))}
                         {pack.categories.length > 2 && (
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-light-100 text-gray-light-700">
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
                             +{pack.categories.length - 2}
                           </span>
                         )}
                       </div>
                     )}
 
-                    {/* Product Name */}
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3 line-clamp-2">
+                    {/* Title */}
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary transition-colors">
                       {pack.name}
                     </h3>
 
@@ -416,31 +409,13 @@ const BrowseMarketplace = () => {
                       ${pack.price_usd.toFixed(2)}
                     </p>
 
-                    {/* Description */}
-                    <p className="text-sm text-gray-light-600 mb-6 line-clamp-2">
-                      {pack.description}
-                    </p>
-
-                    {/* Action Buttons */}
-                    <div className="space-y-3">
-                      <Link
-                        to={`/marketplace/${pack.id}`}
-                        className="w-full inline-flex items-center justify-center px-5 py-3 border border-gray-light-300 rounded-large text-sm font-medium text-gray-light-700 bg-white hover:bg-gray-light-50 transition-colors"
-                      >
-                        View Details
-                      </Link>
-                      <button
-                        onClick={() => handlePurchase(pack.id)}
-                        disabled={processingId === pack.id}
-                        className={`w-full inline-flex items-center justify-center px-5 py-3 border rounded-large text-sm font-medium transition-colors ${
-                          processingId === pack.id
-                            ? 'border-gray-light-300 bg-gray-light-100 text-gray-light-500 cursor-not-allowed'
-                            : 'border-primary bg-primary hover:bg-primary-hover text-white'
-                        }`}
-                      >
-                        {processingId === pack.id ? 'Processing...' : 'Buy Now'}
-                      </button>
-                    </div>
+                    {/* CTA Button */}
+                    <Link
+                      to={`/marketplace/${pack.id}`}
+                      className="btn-primary w-full text-center"
+                    >
+                      View Details
+                    </Link>
                   </div>
                 </div>
               ))}

@@ -126,58 +126,52 @@ const Checkout = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center">
-            <h1 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-              Checkout
-            </h1>
-            <p className="mt-4 text-xl text-gray-500">
-              Complete your purchase securely
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-white">
+      <div className="container-max py-8">
         <Breadcrumb items={breadcrumbItems} />
-        {/* Back to Cart Link */}
-        <div className="mb-6">
-          <Link
-            to="/cart"
-            className="text-blue-600 hover:text-blue-500 flex items-center"
-          >
-            <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to Cart
-          </Link>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Order Summary */}
-          <div className="lg:col-span-1">
-            <div className="bg-white shadow-sm rounded-lg p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Order Summary</h3>
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+          {/* Left: User details */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-4 mb-8">
+              <Link
+                to="/cart"
+                className="text-primary hover:text-primary-hover transition-colors flex items-center"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to Cart
+              </Link>
+            </div>
 
-              {/* Cart Items */}
-              <div className="space-y-4 mb-6">
+            <div className="card">
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">Account Information</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="form-label">Email</label>
+                  <div className="text-gray-900 font-medium">{user.email}</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="card">
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">Order Items</h3>
+              <div className="space-y-4">
                 {cartItems.map((item) => (
-                  <div key={item.id} className="flex items-center space-x-4 py-4 border-b border-gray-200 last:border-b-0">
-                    <div className="flex-shrink-0 h-16 w-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-md flex items-center justify-center">
-                      <svg className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <div key={item.id} className="flex items-center gap-4 p-4 border border-light rounded-lg">
+                    <div className="w-12 h-12 bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg className="w-6 h-6 text-primary/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-medium text-gray-900 truncate">{item.name}</h4>
-                      <p className="text-sm text-gray-500">{item.credits.toLocaleString()} Credits</p>
-                      <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                    <div className="flex-1">
+                      <h4 className="font-medium text-gray-900">{item.name}</h4>
+                      <p className="text-sm text-primary">{item.credits.toLocaleString()} Credits</p>
+                      <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                     </div>
-                    <div className="text-sm font-medium text-gray-900">
-                      ${(item.price * item.quantity).toFixed(2)}
+                    <div className="text-right">
+                      <div className="font-semibold text-gray-900">${(item.price * item.quantity).toFixed(2)}</div>
                     </div>
                   </div>
                 ))}
@@ -185,64 +179,51 @@ const Checkout = () => {
             </div>
           </div>
 
-          {/* User Info & Payment Summary */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* User Information */}
-            <div className="bg-white shadow-sm rounded-lg p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Account Information</h3>
-              <dl className="space-y-3">
-                <div>
-                  <dt className="text-sm font-medium text-gray-500">Email</dt>
-                  <dd className="text-sm text-gray-900">{user.email}</dd>
-                </div>
-              </dl>
-            </div>
+          {/* Right: Order summary */}
+          <div className="space-y-6">
+            <div className="card sticky top-24">
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">Order Summary</h3>
 
-            {/* Payment Summary */}
-            <div className="bg-white shadow-sm rounded-lg p-6 sticky top-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Payment Summary</h3>
-
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Subtotal</span>
-                  <span className="text-gray-900">${calculateSubtotal().toFixed(2)}</span>
+              <div className="space-y-4 mb-8">
+                <div className="flex justify-between text-gray-600">
+                  <span>Subtotal</span>
+                  <span className="font-medium">${calculateSubtotal().toFixed(2)}</span>
                 </div>
 
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">
-                    Processing Fee ({cartItems.reduce((total, item) => total + item.quantity, 0)} item{cartItems.reduce((total, item) => total + item.quantity, 0) !== 1 ? 's' : ''})
-                  </span>
-                  <span className="text-gray-900">${calculateProcessingFee().toFixed(2)}</span>
+                <div className="flex justify-between text-gray-600">
+                  <span>Processing Fee</span>
+                  <span className="font-medium">${calculateProcessingFee().toFixed(2)}</span>
                 </div>
 
-                <div className="border-t border-gray-200 pt-3">
-                  <div className="flex justify-between text-base font-medium">
-                    <span className="text-gray-900">Total</span>
-                    <span className="text-gray-900">${calculateTotal().toFixed(2)}</span>
-                  </div>
-                  <p className="mt-1 text-xs text-gray-500">
-                    Processing fee covers payment security and instant delivery
-                  </p>
+                <hr className="border-light" />
+
+                <div className="flex justify-between text-2xl font-bold text-gray-900">
+                  <span>Total</span>
+                  <span>${calculateTotal().toFixed(2)}</span>
                 </div>
+
+                <p className="text-xs text-gray-500 leading-relaxed">
+                  Processing fee covers secure payment handling and instant digital delivery
+                </p>
               </div>
 
               {/* Terms and Conditions */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="flex items-center">
+              <div className="mb-6">
+                <div className="flex items-start gap-3">
                   <input
                     id="accept-terms"
                     name="accept-terms"
                     type="checkbox"
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="mt-1 h-4 w-4 text-primary focus:ring-primary border-light rounded"
                     required
                   />
-                  <label htmlFor="accept-terms" className="ml-2 block text-sm text-gray-900">
+                  <label htmlFor="accept-terms" className="text-sm text-gray-600 leading-relaxed">
                     I agree to the{' '}
-                    <Link to="/terms" className="text-blue-600 hover:text-blue-500">
+                    <Link to="/terms" className="text-primary hover:text-primary-hover">
                       Terms of Service
                     </Link>{' '}
                     and{' '}
-                    <Link to="/privacy" className="text-blue-600 hover:text-blue-500">
+                    <Link to="/privacy" className="text-primary hover:text-primary-hover">
                       Privacy Policy
                     </Link>
                   </label>
@@ -252,9 +233,9 @@ const Checkout = () => {
               <button
                 onClick={handleProceedToPayment}
                 disabled={loading}
-                className="w-full mt-6 bg-blue-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400 disabled:cursor-not-allowed"
+                className="btn-primary w-full text-lg py-4"
               >
-                {loading ? 'Creating Order...' : `Proceed to Payment - $${calculateTotal().toFixed(2)}`}
+                {loading ? 'Processing...' : 'Pay Now'}
               </button>
             </div>
           </div>

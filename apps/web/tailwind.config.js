@@ -7,11 +7,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Apple's refined blue as primary accent
-        'primary': '#0071E3',
+        // Design System Colors
+        'primary': '#0071E3', // Primary CTA color
         'primary-hover': '#005BB5',
-        // Subtle soft grays for light theme
-        'gray-light': {
+        'danger': '#FF3B30', // Error/danger color
+        'danger-hover': '#D63027',
+        'subtle': '#F9F9F9', // Subtle background gray
+        'light': '#E5E5E7', // Light border gray
+        // Extended grays for comprehensive coverage
+        'gray': {
           50: '#F9F9F9',
           100: '#F2F2F2',
           200: '#E5E5E7',
@@ -19,28 +23,59 @@ export default {
           400: '#AEAEB2',
           500: '#86868B',
           600: '#636366',
+          700: '#48484A',
+          800: '#1C1C1E',
+          900: '#000000',
         },
       },
       fontFamily: {
-        // Clean, modern sans-serif stack inspired by SF Pro
-        sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'HelveticaNeue-Thin', '"Helvetica Neue"', 'sans-serif'],
+        // Modern system font stack
+        sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'HelveticaNeue-Thin', '"Helvetica Neue"', 'sans-serif'],
       },
       spacing: {
-        // Generous white space
+        // Spacing scale (4px base)
+        'xs': '0.25rem',  // 4px
+        'sm': '0.5rem',   // 8px
+        'md': '0.75rem',  // 12px
+        'lg': '1rem',     // 16px
+        'xl': '1.25rem',  // 20px
+        '2xl': '1.5rem',  // 24px
+        '3xl': '2rem',    // 32px
+        '4xl': '2.5rem',  // 40px
+        '5xl': '3rem',    // 48px
+        '6xl': '4rem',    // 64px
         'container': '1200px',
       },
       borderRadius: {
-        'large': '0.625rem', // 10px for softer corners
+        // Consistent border radius
+        'sm': '0.375rem', // 6px for small elements
+        'md': '0.5rem',   // 8px for inputs/buttons
+        'lg': '0.625rem', // 10px for cards
+        'xl': '0.75rem',  // 12px for larger elements
       },
       boxShadow: {
         'subtle': '0 2px 10px rgba(0, 0, 0, 0.1)',
         'card': '0 4px 20px rgba(0, 0, 0, 0.08)',
+        'elevated': '0 8px 30px rgba(0, 0, 0, 0.12)',
       },
       fontSize: {
-        'headline-xl': ['3rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
-        'headline-lg': ['2.25rem', { lineHeight: '1.15', letterSpacing: '-0.01em' }],
-        'headline-md': ['1.875rem', { lineHeight: '1.2' }],
-        'body-lg': ['1.125rem', { lineHeight: '1.6' }],
+        // Typography scale
+        'xs': ['0.75rem', { lineHeight: '1.5' }],     // 12px - Small helper text
+        'sm': ['0.875rem', { lineHeight: '1.5' }],    // 14px - Body small
+        'base': ['1rem', { lineHeight: '1.6' }],      // 16px - Body
+        'lg': ['1.125rem', { lineHeight: '1.6' }],    // 18px - Body large
+        'xl': ['1.25rem', { lineHeight: '1.5' }],     // 20px - H6
+        '2xl': ['1.5rem', { lineHeight: '1.4' }],     // 24px - H5
+        '3xl': ['1.875rem', { lineHeight: '1.3' }],   // 30px - H4
+        '4xl': ['2.25rem', { lineHeight: '1.2' }],    // 36px - H3
+        '5xl': ['3rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],     // 48px - H2
+        '6xl': ['3.75rem', { lineHeight: '1', letterSpacing: '-0.02em' }],    // 60px - H1
+      },
+      fontWeight: {
+        'normal': '400',
+        'medium': '500',
+        'semibold': '600',
+        'bold': '700',
       },
     },
   },

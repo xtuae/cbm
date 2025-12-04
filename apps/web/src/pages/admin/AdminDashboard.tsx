@@ -161,185 +161,146 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="px-4 py-6 sm:px-0">
+    <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Overview</h1>
         <p className="mt-2 text-sm text-gray-600">
-          Platform overview and management
+          Platform analytics and recent activity
         </p>
       </div>
 
-      {/* Stats Cards */}
+      {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
-                  <span className="text-white font-semibold">👥</span>
-                </div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Total Users
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {analytics?.total_users.toLocaleString() || 0}
-                  </dd>
-                </dl>
-              </div>
+        <div className="card">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <span className="text-blue-600 text-xl">👥</span>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Total Users</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {analytics?.total_users.toLocaleString() || 0}
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center">
-                  <span className="text-white font-semibold">💰</span>
-                </div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Total Credits Purchased
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {analytics?.total_credits_purchased.toLocaleString() || 0}
-                  </dd>
-                </dl>
-              </div>
+        <div className="card">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <span className="text-green-600 text-xl">💰</span>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Credits Purchased</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {analytics?.total_credits_purchased.toLocaleString() || 0}
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center">
-                  <span className="text-white font-semibold">📋</span>
-                </div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Total Orders
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {analytics?.orders.total || 0}
-                  </dd>
-                  <dd className="text-sm text-gray-500">
-                    +{analytics?.orders.last7Days || 0} last 7 days
-                  </dd>
-                </dl>
-              </div>
+        <div className="card">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+              <span className="text-yellow-600 text-xl">📋</span>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Total Orders</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {analytics?.orders.total || 0}
+              </p>
+              <p className="text-xs text-gray-500">
+                +{analytics?.orders.last7Days || 0} last 7 days
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-purple-500 rounded-md flex items-center justify-center">
-                  <span className="text-white font-semibold">📅</span>
-                </div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Last 30 Days
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {analytics?.orders.last30Days || 0}
-                  </dd>
-                  <dd className="text-sm text-gray-500">
-                    orders placed
-                  </dd>
-                </dl>
-              </div>
+        <div className="card">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <span className="text-purple-600 text-xl">📅</span>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Last 30 Days</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {analytics?.orders.last30Days || 0}
+              </p>
+              <p className="text-xs text-gray-500">orders placed</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Top Products Chart/List */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <div className="bg-white shadow overflow-hidden sm:rounded-md">
-          <div className="px-4 py-5 sm:px-6">
-            <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-              Top Selling Products
-            </h3>
-            {analytics?.top_products.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                No sales data available
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {analytics?.top_products.map((product, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-md flex items-center justify-center text-white font-semibold">
-                        {index + 1}
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-900">{product.name}</h4>
-                        <p className="text-sm text-gray-500">{product.orderCount} orders</p>
-                      </div>
+      {/* Content Sections */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Top Products */}
+        <div className="card">
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">
+            Top Selling Products
+          </h3>
+          {analytics?.top_products.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              No sales data available
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {analytics?.top_products.map((product, index) => (
+                <div key={index} className="flex items-center justify-between p-4 border border-light rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-semibold">
+                      {index + 1}
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm font-medium text-gray-900">{product.totalCredits.toLocaleString()}</div>
-                      <div className="text-xs text-gray-500">credits sold</div>
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-900">{product.name}</h4>
+                      <p className="text-sm text-gray-600">{product.orderCount} orders</p>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+                  <div className="text-right">
+                    <div className="text-sm font-medium text-gray-900">{product.totalCredits.toLocaleString()}</div>
+                    <div className="text-xs text-gray-500">credits sold</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-white shadow overflow-hidden sm:rounded-md">
-          <div className="px-4 py-5 sm:px-6">
-            <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-              Recent Activity
-            </h3>
-            <ul className="divide-y divide-gray-200">
-              {recentActivity.length === 0 ? (
-                <li className="px-4 py-4 text-gray-500">
-                  No recent activity found
-                </li>
-              ) : (
-                recentActivity.map((activity, index) => (
-                  <li key={index} className="px-4 py-4">
-                    <div className="flex items-center space-x-4">
-                      <div className="flex-shrink-0 text-2xl">
-                        {getActivityIcon(activity.type)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">
-                          {activity.title}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          {activity.description}
-                        </p>
-                        {activity.user && (
-                          <p className="text-xs text-gray-400">
-                            User: {activity.user}
-                          </p>
-                        )}
-                      </div>
-                      <div className="flex-shrink-0 text-sm text-gray-500">
-                        {new Date(activity.timestamp).toLocaleDateString()}
-                      </div>
-                    </div>
-                  </li>
-                ))
-              )}
-            </ul>
+        <div className="card">
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">
+            Recent Activity
+          </h3>
+          <div className="space-y-4">
+            {recentActivity.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">
+                No recent activity found
+              </div>
+            ) : (
+              recentActivity.map((activity, index) => (
+                <div key={index} className="flex items-start space-x-4 p-4 border border-light rounded-lg">
+                  <div className="flex-shrink-0 text-2xl">
+                    {getActivityIcon(activity.type)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900">
+                      {activity.title}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {activity.description}
+                    </p>
+                    {activity.user && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        User: {activity.user}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex-shrink-0 text-sm text-gray-500">
+                    {new Date(activity.timestamp).toLocaleDateString()}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>

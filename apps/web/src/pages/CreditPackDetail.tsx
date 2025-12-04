@@ -272,26 +272,37 @@ const CreditPackDetail = () => {
   const isOnSale = creditPack.is_featured;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-white">
+      <div className="container-max py-8">
         {/* Breadcrumb */}
         <Breadcrumb items={breadcrumbItems} />
-        <div className="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start">
-          {/* Image gallery */}
-          <div className="w-full">
-            <div className="aspect-w-1 aspect-h-1 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg overflow-hidden shadow-lg">
-              <div className="w-full h-full flex items-center justify-center">
-                <svg className="h-24 w-24 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
+
+        {/* Two Column Layout */}
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+          {/* Left: Big product image + gallery */}
+          <div className="space-y-4">
+            <div className="aspect-square bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg flex items-center justify-center">
+              <svg className="w-32 h-32 text-primary/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+
+            {/* Gallery thumbnails would go here */}
+            <div className="flex gap-2">
+              {/* Placeholder thumbnails */}
+              <div className="w-16 h-16 bg-gray-100 rounded border-2 border-gray-200 cursor-pointer"></div>
+              <div className="w-16 h-16 bg-gray-100 rounded border-2 border-primary cursor-pointer"></div>
+              <div className="w-16 h-16 bg-gray-100 rounded border-2 border-gray-200 cursor-pointer"></div>
             </div>
           </div>
 
-          {/* Product info */}
-          <div className="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
+          {/* Right: Product details */}
+          <div className="space-y-6">
+            {/* Product name (H1) */}
             <div className="flex items-start justify-between">
-              <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">{creditPack.name}</h1>
+              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                {creditPack.name}
+              </h1>
               <WishlistButton
                 creditPackId={creditPack.id}
                 variant="default"
@@ -299,53 +310,28 @@ const CreditPackDetail = () => {
               />
             </div>
 
-            {/* Badges */}
-            <div className="mt-4 flex items-center flex-wrap gap-2">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                Digital Good
-              </span>
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                In Stock
-              </span>
-
-              {/* NEW badge - if created within 7 days */}
-              {isNew() && (
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
-                  NEW
-                </span>
-              )}
-
-              {/* POPULAR badge - placeholder based on random chance */}
-              {isPopular() && (
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-orange-100 text-orange-800">
-                  POPULAR
-                </span>
-              )}
-
-              {/* ON SALE badge - if is_featured is true */}
-              {isOnSale && (
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
-                  ON SALE
-                </span>
-              )}
+            {/* Price */}
+            <div className="text-5xl font-bold text-gray-900">
+              ${creditPack.price_usd.toFixed(2)}
             </div>
 
-            {/* Price and credits */}
-            <div className="mt-6">
-              <h2 className="sr-only">Product information</h2>
-              <p className="text-4xl text-gray-900 font-bold">${creditPack.price_usd.toFixed(2)}</p>
-              <p className="mt-2 text-lg text-blue-600 font-medium">
-                {creditPack.credit_amount.toLocaleString()} Credits
-              </p>
+            {/* Credits */}
+            <div className="text-xl text-primary font-semibold">
+              {creditPack.credit_amount.toLocaleString()} Digital Credits
             </div>
 
-            {/* Categories */}
+            {/* Short description */}
+            <div className="text-lg text-gray-600 leading-relaxed max-w-md">
+              {creditPack.short_description || creditPack.description || 'Secure digital credits for premium platform services.'}
+            </div>
+
+            {/* Category badges */}
             {creditPack.categories && creditPack.categories.length > 0 && (
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2">
                 {creditPack.categories.map((category) => (
                   <span
                     key={category.id}
-                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800"
+                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700"
                   >
                     {category.name}
                   </span>
@@ -353,139 +339,74 @@ const CreditPackDetail = () => {
               </div>
             )}
 
-            {/* In-game value placeholder */}
-            <div className="mt-6 bg-gray-50 rounded-lg p-4">
-              <h3 className="text-sm font-medium text-gray-900">Internal Value</h3>
-              <p className="mt-1 text-sm text-gray-600">
-                This credit pack provides {creditPack.credit_amount.toLocaleString()} credits that can be used for any digital service on our platform.
-                Credits are non-refundable but never expire.
-              </p>
+            {/* Add to Cart / Buy Now */}
+            <div className="flex gap-4 pt-4">
+              <button
+                onClick={() => handlePurchase('cart')}
+                className="btn-secondary flex-1"
+              >
+                Add to Cart
+              </button>
+              <button
+                onClick={() => handlePurchase('buy')}
+                disabled={processingId === creditPack.id}
+                className="btn-primary flex-1"
+              >
+                {processingId === creditPack.id ? 'Processing...' : 'Buy Now'}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Below: Divider + Long description */}
+        <div className="mt-16 pt-12 border-t border-light">
+          <div className="prose prose-lg max-w-none">
+            {creditPack.long_description ? (
+              <RichTextDisplay content={creditPack.long_description} />
+            ) : (
+              <div className="space-y-6">
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  This credit pack contains {creditPack.credit_amount.toLocaleString()} digital credits that can be redeemed for premium services on our platform.
+                </p>
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  Credits provide instant access to digital goods and services without traditional payment processing. All purchases are secured with enterprise-grade encryption.
+                </p>
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  Start using your credits immediately or save them for future premium service purchases across our entire platform ecosystem.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Optional feature bullets */}
+          <div className="mt-12 grid md:grid-cols-3 gap-8">
+            <div className="flex items-start gap-3">
+              <svg className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <div>
+                <h3 className="font-semibold text-gray-900">Instant Delivery</h3>
+                <p className="text-sm text-gray-600 mt-1">Credits added immediately upon payment verification</p>
+              </div>
             </div>
 
-            <form className="mt-8">
-              {/* Quantity */}
-              <div className="flex items-center">
-                <label htmlFor="quantity" className="mr-4 text-sm font-medium text-gray-700">
-                  Quantity
-                </label>
-                <select
-                  id="quantity"
-                  name="quantity"
-                  value={quantity}
-                  onChange={(e) => handleQuantityChange(parseInt(e.target.value))}
-                  className="max-w-full rounded-md border border-gray-300 py-1.5 text-base leading-5 text-left shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm"
-                >
-                  {[...Array(10)].map((_, i) => (
-                    <option key={i + 1} value={i + 1}>
-                      {i + 1}
-                    </option>
-                  ))}
-                </select>
+            <div className="flex items-start gap-3">
+              <svg className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              <div>
+                <h3 className="font-semibold text-gray-900">Secure Payment</h3>
+                <p className="text-sm text-gray-600 mt-1">Bank-level encryption and fraud protection</p>
               </div>
+            </div>
 
-              {/* Action buttons */}
-              <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={() => handlePurchase('buy')}
-                  disabled={processingId === creditPack.id}
-                  className="flex-1 bg-blue-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400 disabled:cursor-not-allowed"
-                >
-                  {processingId === creditPack.id ? 'Processing...' : `Buy Now - $${(creditPack.price_usd * quantity).toFixed(2)}`}
-                </button>
-                <button
-                  onClick={() => handlePurchase('cart')}
-                  disabled={processingId === creditPack.id}
-                  className="flex-1 bg-white border border-gray-300 rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                >
-                  Add to Cart
-                </button>
-              </div>
-            </form>
-
-            {/* Description tabs */}
-            <div className="mt-16">
-              <div className="border-b border-gray-200">
-                <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-                  <button
-                    onClick={() => setSelectedTab('description')}
-                    className={`whitespace-nowrap py-6 border-b-2 font-medium text-sm ${
-                      selectedTab === 'description'
-                        ? 'border-blue-500 text-blue-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    }`}
-                  >
-                    Description
-                  </button>
-                  <button
-                    onClick={() => setSelectedTab('details')}
-                    className={`whitespace-nowrap py-6 border-b-2 font-medium text-sm ${
-                      selectedTab === 'details'
-                        ? 'border-blue-500 text-blue-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    }`}
-                  >
-                    Details
-                  </button>
-                </nav>
-              </div>
-
-              <div className="py-6">
-                {selectedTab === 'description' ? (
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">About this Credit Pack</h3>
-                    <div className="text-base text-gray-700 space-y-6">
-                      {creditPack.long_description ? (
-                        <RichTextDisplay content={creditPack.long_description} />
-                      ) : (
-                        <>
-                          <p>This credit pack contains {creditPack.credit_amount.toLocaleString()} credits that can be redeemed for any digital service available on our platform.</p>
-                          <p>
-                            Credits provide instant access to premium digital goods and services without the need for traditional payment methods.
-                            All purchases are processed securely, and credits are added to your account immediately upon successful payment verification.
-                          </p>
-                          <p>
-                            Start using your credits right away or save them for future digital service purchases.
-                          </p>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Credit Pack Details</h3>
-                    <div className="border-t border-gray-200">
-                      <dl>
-                        <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-500">Credits Included</dt>
-                          <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {creditPack.credit_amount.toLocaleString()} Credits
-                          </dd>
-                        </div>
-                        <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-500">Type</dt>
-                          <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            Digital Goods Credit Pack
-                          </dd>
-                        </div>
-                        <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-500">Categories</dt>
-                          <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {creditPack.categories && creditPack.categories.length > 0
-                              ? creditPack.categories.map(cat => cat.name).join(', ')
-                              : 'General'
-                            }
-                          </dd>
-                        </div>
-                        <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-500">Delivery</dt>
-                          <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            Instant - Credits added immediately upon payment
-                          </dd>
-                        </div>
-                      </dl>
-                    </div>
-                  </div>
-                )}
+            <div className="flex items-start gap-3">
+              <svg className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+              <div>
+                <h3 className="font-semibold text-gray-900">Never Expires</h3>
+                <p className="text-sm text-gray-600 mt-1">Credits remain valid indefinitely for future use</p>
               </div>
             </div>
           </div>

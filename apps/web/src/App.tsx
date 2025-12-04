@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 import MainLayout from './components/Layout';
+import DashboardLayout from './components/DashboardLayout';
 import AdminLayout from './layouts/AdminLayout';
 import Landing from './pages/Landing';
 import BrowseMarketplace from './pages/BrowseMarketplace';
@@ -87,19 +88,15 @@ function AppContent() {
           }
         />
 
+        {/* Dashboard Routes - Use separate DashboardLayout */}
         <Route
-          path="dashboard"
+          path="/dashboard/*"
           element={
             <RequireAuth>
-              <Dashboard />
+              <DashboardLayout />
             </RequireAuth>
           }
-        >
-          <Route index element={<div>Dashboard Overview</div>} />
-          <Route path="orders" element={<OrdersHistory />} />
-          <Route path="ledger" element={<CreditLedger />} />
-          <Route path="wallet" element={<WalletManagement />} />
-        </Route>
+        />
 
         {/* Authentication Pages */}
         <Route path="login" element={<AuthForm mode="signin" onToggleMode={() => {}} />} />

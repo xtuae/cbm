@@ -137,94 +137,88 @@ const CreditLedger = () => {
   }
 
   return (
-    <div className="px-4 py-6 sm:px-0">
+    <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Credit Ledger</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Ledger</h1>
         <p className="mt-2 text-sm text-gray-600">
-          View all your credit transactions and balance changes
+          Your credit transaction history
         </p>
       </div>
 
       {ledgerEntries.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="text-gray-500">
-            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2z" />
-            </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No transactions found</h3>
-            <p className="mt-1 text-sm text-gray-500">You don't have any credit transactions yet.</p>
-          </div>
+        <div className="card text-center py-12">
+          <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+          <h3 className="mt-2 text-sm font-medium text-gray-900">No transactions found</h3>
+          <p className="mt-1 text-sm text-gray-500">You don't have any credit transactions yet.</p>
         </div>
       ) : (
-        <>
-          <div className="bg-white shadow overflow-hidden sm:rounded-md">
-            <div className="px-4 py-5 sm:p-6">
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Date
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Type
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Description
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Amount
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Balance After
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {ledgerEntries.map((entry) => (
-                      <tr key={entry.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {formatDate(entry.created_at)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getTransactionTypeColor(entry.transaction_type)}`}>
-                            {formatTransactionType(entry.transaction_type)}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500">
-                          {entry.description || 'No description'}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-right">
-                          <span className={entry.transaction_type === 'credit_purchase' || entry.transaction_type === 'reward' ? 'text-green-600' : 'text-red-600'}>
-                            {formatAmount(entry.amount, entry.transaction_type)}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
-                          {entry.balance_after} credits
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+        <div className="card">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-light">
+                  <th className="text-left py-4 px-4 text-sm font-medium text-gray-600">Date</th>
+                  <th className="text-left py-4 px-4 text-sm font-medium text-gray-600">Type</th>
+                  <th className="text-left py-4 px-4 text-sm font-medium text-gray-600">Description</th>
+                  <th className="text-right py-4 px-4 text-sm font-medium text-gray-600">Amount</th>
+                  <th className="text-right py-4 px-4 text-sm font-medium text-gray-600">Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ledgerEntries.map((entry) => (
+                  <tr key={entry.id} className="border-b border-light hover:bg-gray-50">
+                    <td className="py-4 px-4">
+                      <span className="text-sm text-gray-900">
+                        {formatDate(entry.created_at)}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getTransactionTypeColor(entry.transaction_type)}`}>
+                        {formatTransactionType(entry.transaction_type)}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4">
+                      <span className="text-sm text-gray-600">
+                        {entry.description || 'No description'}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 text-right">
+                      <span className={`text-sm font-medium ${
+                        entry.transaction_type === 'credit_purchase' || entry.transaction_type === 'reward'
+                          ? 'text-green-600'
+                          : 'text-red-600'
+                      }`}>
+                        {formatAmount(entry.amount, entry.transaction_type)}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 text-right">
+                      <span className="text-sm font-medium text-gray-900">
+                        {entry.balance_after} credits
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
           {/* Pagination */}
           {pagination && pagination.total_pages > 1 && (
-            <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 mt-6">
+            <div className="px-4 py-3 border-t border-light flex items-center justify-between">
               <div className="flex-1 flex justify-between sm:hidden">
                 <button
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                   disabled={!pagination.has_prev}
-                  className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="btn-secondary text-sm"
                 >
                   Previous
                 </button>
                 <button
                   onClick={() => setCurrentPage(Math.min(pagination.total_pages, currentPage + 1))}
                   disabled={!pagination.has_next}
-                  className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="btn-secondary text-sm ml-3"
                 >
                   Next
                 </button>
@@ -242,11 +236,10 @@ const CreditLedger = () => {
                     <button
                       onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                       disabled={!pagination.has_prev}
-                      className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="btn-secondary text-sm rounded-r-none border-r-0"
                     >
-                      <span className="sr-only">Previous</span>
-                      <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l-4-4a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     </button>
                     {Array.from({ length: Math.min(5, pagination.total_pages) }, (_, i) => {
@@ -255,10 +248,8 @@ const CreditLedger = () => {
                         <button
                           key={page}
                           onClick={() => setCurrentPage(page)}
-                          className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                            page === currentPage
-                              ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
-                              : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                          className={`btn-secondary text-sm rounded-none border-r-0 ${
+                            page === currentPage ? 'bg-primary text-white' : ''
                           }`}
                         >
                           {page}
@@ -268,10 +259,9 @@ const CreditLedger = () => {
                     <button
                       onClick={() => setCurrentPage(Math.min(pagination.total_pages, currentPage + 1))}
                       disabled={!pagination.has_next}
-                      className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="btn-secondary text-sm rounded-l-none border-l-0"
                     >
-                      <span className="sr-only">Next</span>
-                      <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                       </svg>
                     </button>
@@ -280,7 +270,7 @@ const CreditLedger = () => {
               </div>
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

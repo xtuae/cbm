@@ -1,49 +1,61 @@
+import { Link } from 'react-router-dom';
+
 const Footer = () => {
   return (
-    <footer className="bg-white">
-      <div className="max-w-[1200px] mx-auto px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12">
-          <div className="lg:col-span-2 space-y-8">
-            <div className="text-lg font-semibold text-gray-light-600">Credits Marketplace</div>
-            <div className="text-sm text-gray-light-500 leading-relaxed max-w-md">
+    <footer className="bg-gray-50 border-t border-light">
+      <div className="container-max section-spacing">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Column 1: About / Contact */}
+          <div className="space-y-4">
+            <div className="text-lg font-semibold text-gray-600">Credits Marketplace</div>
+            <div className="text-muted-xs leading-relaxed max-w-sm">
               Secure digital marketplace for credits and digital services.
-              Trusted by thousands of users worldwide.
+              Trusted by users worldwide.
+            </div>
+            <div className="space-y-2">
+              <Link to="/about" className="block text-muted-xs hover:text-primary transition-colors">
+                About Us
+              </Link>
+              <Link to="/contact" className="block text-muted-xs hover:text-primary transition-colors">
+                Contact
+              </Link>
             </div>
           </div>
 
+          {/* Column 2: Policies */}
           <div className="space-y-4">
-            <div className="text-sm font-medium text-gray-light-600">About</div>
-            <div className="space-y-3">
-              <a href="/about" className="block text-sm text-gray-light-500 hover:text-primary transition-colors">About Us</a>
-              <a href="/contact" className="block text-sm text-gray-light-500 hover:text-primary transition-colors">Contact</a>
+            <div className="text-sm font-medium text-gray-600">Policies</div>
+            <div className="space-y-2">
+              <Link to="/terms" className="block text-muted-xs hover:text-primary transition-colors">
+                Terms of Service
+              </Link>
+              <Link to="/privacy" className="block text-muted-xs hover:text-primary transition-colors">
+                Privacy Policy
+              </Link>
+              <Link to="/refund" className="block text-muted-xs hover:text-primary transition-colors">
+                Refund Policy
+              </Link>
             </div>
           </div>
 
+          {/* Column 3: Platform */}
           <div className="space-y-4">
-            <div className="text-sm font-medium text-gray-light-600">Support</div>
-            <div className="space-y-3">
-              <a href="/marketplace" className="block text-sm text-gray-light-500 hover:text-primary transition-colors">Marketplace</a>
-              <a href="/cart" className="block text-sm text-gray-light-500 hover:text-primary transition-colors">Cart</a>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="text-sm font-medium text-gray-light-600">Legal</div>
-            <div className="space-y-3">
-              <a href="/terms" className="block text-sm text-gray-light-500 hover:text-primary transition-colors">Terms</a>
-              <a href="/privacy" className="block text-sm text-gray-light-500 hover:text-primary transition-colors">Privacy</a>
+            <div className="text-sm font-medium text-gray-600">Platform</div>
+            <div className="space-y-2">
+              <Link to="/marketplace" className="block text-muted-xs hover:text-primary transition-colors">
+                Marketplace
+              </Link>
+              <Link to="/dashboard" className="block text-muted-xs hover:text-primary transition-colors">
+                Dashboard
+              </Link>
             </div>
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-gray-light-200">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-sm text-gray-light-500">
-              © {new Date().getFullYear()} Credits Marketplace. All rights reserved.
-            </div>
-            <div className="text-sm text-gray-light-500">
-              Secure payments powered by Stripe
-            </div>
+        {/* Bottom bar: copyright */}
+        <div className="mt-8 pt-6 border-t border-light">
+          <div className="text-center text-muted-xs">
+            © {new Date().getFullYear()} Credits Marketplace. All rights reserved.
           </div>
         </div>
       </div>

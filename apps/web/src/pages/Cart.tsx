@@ -157,127 +157,126 @@ const Cart = () => {
   ];
 
   return (
-    <div className="bg-white">
-      <div className="max-w-[1200px] mx-auto px-6 lg:px-8 py-16">
+    <div className="bg-white min-h-screen">
+      <div className="container-max py-8">
         <Breadcrumb items={breadcrumbItems} />
 
-        {/* Header */}
-        <header className="text-center mb-16">
-          <h1 className="headline-lg text-gray-900 mb-4">Cart</h1>
-          <p className="body-lg text-gray-light-600">
-            {cartItems.reduce((total, item) => total + item.quantity, 0)} digital credit{cartItems.reduce((total, item) => total + item.quantity, 0) !== 1 ? 's' : ''} in your cart
-          </p>
-        </header>
-
         <div className="grid lg:grid-cols-3 gap-12">
-          {/* Cart Items */}
-          <div className="lg:col-span-2 space-y-6">
-            {cartItems.map((item) => (
-              <div key={item.id} className="bg-white border border-gray-light-200 rounded-large p-6 shadow-card">
-                <div className="flex gap-6">
-                  {/* Product Image */}
-                  <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-primary/5 to-primary/10 rounded-large flex items-center justify-center">
-                    <svg className="w-8 h-8 text-primary/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
+          {/* Cart Table */}
+          <div className="lg:col-span-2">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-light">
+                    <th className="text-left py-4 px-2 text-sm font-medium text-gray-600">Product</th>
+                    <th className="text-center py-4 px-2 text-sm font-medium text-gray-600">Credits</th>
+                    <th className="text-center py-4 px-2 text-sm font-medium text-gray-600">Price</th>
+                    <th className="text-center py-4 px-2 text-sm font-medium text-gray-600">Quantity</th>
+                    <th className="text-center py-4 px-2 text-sm font-medium text-gray-600">Remove</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cartItems.map((item) => (
+                    <tr key={item.id} className="border-b border-light">
+                      <td className="py-6 px-2">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg className="w-6 h-6 text-primary/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </div>
+                          <div>
+                            <h3 className="font-medium text-gray-900">{item.name}</h3>
+                            <p className="text-sm text-gray-600">${item.price.toFixed(2)} each</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="text-center py-6 px-2">
+                        <span className="text-sm font-medium text-primary">{item.credits.toLocaleString()}</span>
+                      </td>
+                      <td className="text-center py-6 px-2">
+                        <span className="text-sm font-medium text-gray-900">${item.price.toFixed(2)}</span>
+                      </td>
+                      <td className="text-center py-6 px-2">
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            onClick={() => decrementQuantity(item.id)}
+                            className="w-8 h-8 rounded border border-light flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors"
+                            disabled={item.quantity <= 1}
+                          >
+                            -
+                          </button>
+                          <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
+                          <button
+                            onClick={() => incrementQuantity(item.id)}
+                            className="w-8 h-8 rounded border border-light flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors"
+                            disabled={item.quantity >= 99}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </td>
+                      <td className="text-center py-6 px-2">
+                        <button
+                          onClick={() => removeItem(item.id)}
+                          className="text-gray-400 hover:text-red-600 transition-colors"
+                        >
+                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-                  {/* Product Details */}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">{item.name}</h3>
-                    <p className="text-primary font-medium mb-3">{item.credits.toLocaleString()} Digital Credits</p>
-
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <span className="text-lg font-semibold text-gray-900">${item.price.toFixed(2)}</span>
-                        <span className="text-sm text-gray-light-600">Processing fee: $0.99</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Quantity and Remove */}
-                  <div className="flex flex-col items-end gap-3">
-                    {/* Quantity Controls */}
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => decrementQuantity(item.id)}
-                        className="w-8 h-8 rounded-large border border-gray-light-300 flex items-center justify-center text-gray-light-600 hover:bg-gray-light-50 transition-colors"
-                        disabled={item.quantity <= 1}
-                      >
-                        -
-                      </button>
-                      <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
-                      <button
-                        onClick={() => incrementQuantity(item.id)}
-                        className="w-8 h-8 rounded-large border border-gray-light-300 flex items-center justify-center text-gray-light-600 hover:bg-gray-light-50 transition-colors"
-                        disabled={item.quantity >= 99}
-                      >
-                        +
-                      </button>
-                    </div>
-
-                    {/* Subtotal */}
-                    <div className="text-lg font-semibold text-gray-900">
-                      ${(item.price * item.quantity).toFixed(2)}
-                    </div>
-
-                    {/* Remove Button */}
-                    <button
-                      onClick={() => removeItem(item.id)}
-                      className="text-sm text-gray-light-500 hover:text-red-600 transition-colors"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+            <div className="mt-8">
+              <Link
+                to="/marketplace"
+                className="text-primary hover:text-primary-hover transition-colors"
+              >
+                ← Continue Shopping
+              </Link>
+            </div>
           </div>
 
-          {/* Order Summary - Premium Card */}
+          {/* Sticky Summary Card */}
           <div className="lg:col-span-1">
-            <div className="bg-white border border-gray-light-200 rounded-large p-8 shadow-card sticky top-6">
+            <div className="card sticky top-24">
               <h3 className="text-lg font-semibold text-gray-900 mb-6">Order Summary</h3>
 
               <div className="space-y-4 mb-8">
-                <div className="flex justify-between text-gray-light-600">
+                <div className="flex justify-between text-gray-600">
                   <span>Subtotal</span>
                   <span className="font-medium">${calculateSubtotal().toFixed(2)}</span>
                 </div>
 
-                <div className="flex justify-between text-gray-light-600">
+                <div className="flex justify-between text-gray-600">
                   <span>Processing Fee</span>
                   <span className="font-medium">${calculateProcessingFee().toFixed(2)}</span>
                 </div>
 
-                <hr className="border-gray-light-200" />
+                <hr className="border-light" />
 
                 <div className="flex justify-between text-xl font-semibold text-gray-900">
                   <span>Total</span>
                   <span>${calculateTotal().toFixed(2)}</span>
                 </div>
 
-                <p className="text-xs text-gray-light-500 leading-relaxed">
+                <p className="text-xs text-gray-500 leading-relaxed">
                   Processing fee covers secure payment handling and instant digital delivery
                 </p>
               </div>
 
-              <div className="space-y-4">
-                <button
-                  onClick={handleCheckout}
-                  disabled={loading || cartItems.length === 0}
-                  className="w-full bg-primary hover:bg-primary-hover text-white font-medium rounded-large px-6 py-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loading ? 'Processing...' : 'Continue to Checkout'}
-                </button>
-
-                <Link
-                  to="/marketplace"
-                  className="block text-center text-primary hover:text-primary-hover transition-colors py-2"
-                >
-                  Continue Shopping
-                </Link>
-              </div>
+              <button
+                onClick={handleCheckout}
+                disabled={loading || cartItems.length === 0}
+                className="btn-primary w-full"
+              >
+                {loading ? 'Processing...' : 'Continue to Checkout'}
+              </button>
             </div>
           </div>
         </div>

@@ -170,77 +170,54 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="px-4 py-6 sm:px-0">
+    <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Overview</h1>
         <p className="mt-2 text-sm text-gray-600">
-          Manage your credits and view recent activity
+          Your account summary and recent activity
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
-                  <span className="text-white font-semibold">C</span>
-                </div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Credit Balance
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {creditSummary ? creditSummary.credit_balance.toLocaleString() : '0'} Credits
-                  </dd>
-                </dl>
-              </div>
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="card">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+              <span className="text-primary font-semibold text-lg">C</span>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Credit Balance</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {creditSummary ? creditSummary.credit_balance.toLocaleString() : '0'}
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center">
-                  <span className="text-white font-semibold">$</span>
-                </div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Total Purchased
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {creditSummary ? creditSummary.total_purchased.toLocaleString() : '0'} Credits
-                  </dd>
-                </dl>
-              </div>
+        <div className="card">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <span className="text-green-600 font-semibold text-lg">$</span>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Total Purchased</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {creditSummary ? creditSummary.total_purchased.toLocaleString() : '0'}
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-purple-500 rounded-md flex items-center justify-center">
-                  <span className="text-white font-semibold">H</span>
-                </div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Total Converted
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {creditSummary ? creditSummary.total_converted.toLocaleString() : '0'} Credits
-                  </dd>
-                </dl>
-              </div>
+        <div className="card">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <span className="text-purple-600 font-semibold text-lg">H</span>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Total Converted</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {creditSummary ? creditSummary.total_converted.toLocaleString() : '0'}
+              </p>
             </div>
           </div>
         </div>

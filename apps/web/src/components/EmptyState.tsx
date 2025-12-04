@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import { Button } from './ui';
 
 interface EmptyStateProps {
   icon?: ReactNode;
@@ -35,19 +36,13 @@ const EmptyState = ({
       </p>
       {(actionLabel && (actionHref || actionOnClick)) && (
         actionHref ? (
-          <Link
-            to={actionHref}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            {actionLabel}
+          <Link to={actionHref}>
+            <Button variant="primary">{actionLabel}</Button>
           </Link>
         ) : (
-          <button
-            onClick={actionOnClick}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
+          <Button onClick={actionOnClick} variant="primary">
             {actionLabel}
-          </button>
+          </Button>
         )
       )}
     </div>
@@ -108,6 +103,54 @@ export const EmptyOrders = () => (
     description="You haven't made any purchases yet. Start by browsing our marketplace."
     actionLabel="Browse Marketplace"
     actionHref="/marketplace"
+  />
+);
+
+// Empty state for categories
+export const EmptyCategories = () => (
+  <EmptyState
+    icon={
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+      </svg>
+    }
+    title="No categories available"
+    description="There are currently no product categories to browse."
+    actionLabel="Browse All Products"
+    actionHref="/marketplace"
+  />
+);
+
+// Empty state for ledger/transactions
+export const EmptyLedger = () => (
+  <EmptyState
+    icon={
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v8a2 2 0 002 2z" />
+      </svg>
+    }
+    title="No transactions found"
+    description="Your credit transaction history will appear here once you make purchases."
+    actionLabel="Browse Marketplace"
+    actionHref="/marketplace"
+  />
+);
+
+// Empty state for wallet addresses
+export const EmptyWallets = () => (
+  <EmptyState
+    icon={
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+      </svg>
+    }
+    title="No wallet addresses"
+    description="Add your blockchain wallet addresses to receive rewards and track your digital assets."
+    actionLabel="Add Wallet"
+    actionOnClick={() => {
+      // This would trigger the add wallet modal
+      console.log('Add wallet clicked');
+    }}
   />
 );
 

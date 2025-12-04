@@ -383,57 +383,77 @@ const OrdersHistory = () => {
   }
 
   return (
-    <div className="px-4 py-6 sm:px-0">
+    <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Orders History</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Orders</h1>
         <p className="mt-2 text-sm text-gray-600">
-          View all your credit purchase orders
+          Your credit purchase history
         </p>
       </div>
 
       {orders.length === 0 ? (
         <EmptyOrders />
       ) : (
-        <div className="bg-white shadow overflow-hidden sm:rounded-md">
-          <ul className="divide-y divide-gray-200">
-            {orders.map((order) => (
-              <Link
-                key={order.id}
-                to={`/dashboard/orders/${order.id}`}
-                className="block hover:bg-gray-50"
-              >
-                <li>
-                  <div className="px-4 py-4 sm:px-6">
-                    <div className="flex items-center justify-between">
+        <div className="card">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-light">
+                  <th className="text-left py-4 px-4 text-sm font-medium text-gray-600">Order</th>
+                  <th className="text-left py-4 px-4 text-sm font-medium text-gray-600">Credits</th>
+                  <th className="text-left py-4 px-4 text-sm font-medium text-gray-600">Amount</th>
+                  <th className="text-left py-4 px-4 text-sm font-medium text-gray-600">Status</th>
+                  <th className="text-left py-4 px-4 text-sm font-medium text-gray-600">Date</th>
+                  <th className="text-right py-4 px-4 text-sm font-medium text-gray-600">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order.id} className="border-b border-light hover:bg-gray-50">
+                    <td className="py-4 px-4">
                       <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10">
-                          <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center">
-                            <span className="text-white font-medium">P</span>
-                          </div>
+                        <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                          <span className="text-primary font-medium text-sm">P</span>
                         </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
-                            {getOrderSummary(order)}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {getCreditsGranted(order).toLocaleString()} credits • ${order.total_amount.toFixed(2)}
-                          </div>
+                        <div className="ml-3">
+                          <div className="font-medium text-gray-900">#{order.id.slice(-8)}</div>
+                          <div className="text-sm text-gray-600">{getOrderSummary(order)}</div>
                         </div>
                       </div>
-                      <div className="flex flex-col items-end">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
-                          {order.status}
-                        </span>
-                        <div className="mt-1 text-sm text-gray-500">
-                          {formatDate(order.created_at)}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </Link>
-            ))}
-          </ul>
+                    </td>
+                    <td className="py-4 px-4">
+                      <span className="text-sm font-medium text-primary">
+                        {getCreditsGranted(order).toLocaleString()}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4">
+                      <span className="text-sm font-medium text-gray-900">
+                        ${order.total_amount.toFixed(2)}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
+                        {order.status}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4">
+                      <span className="text-sm text-gray-600">
+                        {formatDate(order.created_at)}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 text-right">
+                      <Link
+                        to={`/dashboard/orders/${order.id}`}
+                        className="btn-secondary text-sm px-3 py-1"
+                      >
+                        View
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

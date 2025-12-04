@@ -1,15 +1,15 @@
-// Loading skeletons for different page layouts
+// Loading skeletons for different page layouts using design system
 
 // Marketplace product card skeleton
 export const ProductCardSkeleton = () => (
-  <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden animate-pulse">
+  <div className="card animate-pulse">
     {/* Product Image Placeholder */}
-    <div className="aspect-w-1 aspect-h-1 bg-gray-200"></div>
+    <div className="aspect-square bg-gray-200 rounded-lg"></div>
 
     {/* Product Info Skeleton */}
-    <div className="p-4 space-y-3">
+    <div className="p-6 space-y-3">
       {/* Category Badges */}
-      <div className="flex gap-1">
+      <div className="flex gap-2">
         <div className="h-6 bg-gray-200 rounded-full w-16"></div>
         <div className="h-6 bg-gray-200 rounded-full w-12"></div>
       </div>
@@ -18,20 +18,13 @@ export const ProductCardSkeleton = () => (
       <div className="h-6 bg-gray-200 rounded w-3/4"></div>
 
       {/* Credits Amount */}
-      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+      <div className="h-5 bg-gray-200 rounded w-1/2"></div>
 
       {/* Price */}
       <div className="h-8 bg-gray-200 rounded w-1/3"></div>
 
-      {/* Description */}
-      <div className="space-y-2">
-        <div className="h-4 bg-gray-200 rounded"></div>
-        <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-      </div>
-
-      {/* Action Buttons */}
-      <div className="space-y-2 pt-2">
-        <div className="h-10 bg-gray-200 rounded"></div>
+      {/* Action Button */}
+      <div className="pt-2">
         <div className="h-10 bg-gray-200 rounded"></div>
       </div>
     </div>

@@ -153,17 +153,17 @@ const WalletManagement = () => {
   }
 
   return (
-    <div className="px-4 py-6 sm:px-0">
+    <div>
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Wallet Management</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Wallet</h1>
           <p className="mt-2 text-sm text-gray-600">
-            Manage your blockchain wallet addresses for receiving rewards
+            Manage your blockchain wallet addresses
           </p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+          className="btn-primary"
         >
           <svg className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -173,85 +173,100 @@ const WalletManagement = () => {
       </div>
 
       {error && (
-        <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          {error}
+        <div className="mb-6 card border-red-200 bg-red-50">
+          <p className="text-red-700">{error}</p>
         </div>
       )}
 
       {wallets.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="text-gray-500">
-            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-            </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No wallets added</h3>
-            <p className="mt-1 text-sm text-gray-500">Add your first wallet address to receive rewards.</p>
-          </div>
+        <div className="card text-center py-12">
+          <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+          </svg>
+          <h3 className="mt-2 text-sm font-medium text-gray-900">No wallets added</h3>
+          <p className="mt-1 text-sm text-gray-500">Add your first wallet address to receive rewards.</p>
         </div>
       ) : (
-        <div className="bg-white shadow overflow-hidden sm:rounded-md">
-          <ul className="divide-y divide-gray-200">
-            {wallets.map((wallet) => (
-              <li key={wallet.id}>
-                <div className="px-4 py-4 sm:px-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10">
-                        <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center">
+        <div className="card">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-light">
+                  <th className="text-left py-4 px-4 text-sm font-medium text-gray-600">Wallet</th>
+                  <th className="text-left py-4 px-4 text-sm font-medium text-gray-600">Network</th>
+                  <th className="text-left py-4 px-4 text-sm font-medium text-gray-600">Address</th>
+                  <th className="text-left py-4 px-4 text-sm font-medium text-gray-600">Status</th>
+                  <th className="text-right py-4 px-4 text-sm font-medium text-gray-600">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {wallets.map((wallet) => (
+                  <tr key={wallet.id} className="border-b border-light hover:bg-gray-50">
+                    <td className="py-4 px-4">
+                      <div className="flex items-center">
+                        <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
                           <span className="text-sm font-medium text-gray-600">
                             {wallet.network.slice(0, 1).toUpperCase()}
                           </span>
                         </div>
-                      </div>
-                      <div className="ml-4">
-                        <div className="flex items-center space-x-2">
-                          <div className="text-sm font-medium text-gray-900">
+                        <div className="ml-3">
+                          <div className="font-medium text-gray-900">
                             {wallet.label || `${wallet.network} Wallet`}
                           </div>
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full capitalize ${getNetworkColor(wallet.network)}`}>
-                            {wallet.network}
-                          </span>
-                          {wallet.is_primary && (
-                            <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                              Primary
-                            </span>
-                          )}
-                          {!wallet.is_verified && (
-                            <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                              Unverified
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-sm text-gray-500 font-mono">
-                          {formatAddress(wallet.address)}
                         </div>
                       </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() => navigator.clipboard.writeText(wallet.address)}
-                        className="text-gray-400 hover:text-gray-500 p-1"
-                        title="Copy address"
-                      >
-                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                        </svg>
-                      </button>
-                      <button
-                        onClick={() => handleDeleteWallet(wallet.id)}
-                        className="text-red-400 hover:text-red-500 p-1"
-                        title="Delete wallet"
-                      >
-                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
+                    </td>
+                    <td className="py-4 px-4">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full capitalize ${getNetworkColor(wallet.network)}`}>
+                        {wallet.network}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4">
+                      <span className="text-sm font-mono text-gray-600">
+                        {formatAddress(wallet.address)}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4">
+                      <div className="flex gap-2">
+                        {wallet.is_primary && (
+                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                            Primary
+                          </span>
+                        )}
+                        {!wallet.is_verified && (
+                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            Unverified
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="py-4 px-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => navigator.clipboard.writeText(wallet.address)}
+                          className="text-gray-400 hover:text-gray-600 p-1"
+                          title="Copy address"
+                        >
+                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => handleDeleteWallet(wallet.id)}
+                          className="text-gray-400 hover:text-red-600 p-1"
+                          title="Delete wallet"
+                        >
+                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
