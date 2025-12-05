@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import Breadcrumb from '../components/Breadcrumb';
+import { OrderSummaryCard } from '../components/ui';
 
 interface CartItem {
   id: string;
@@ -181,63 +182,15 @@ const Checkout = () => {
 
           {/* Right: Order summary */}
           <div className="space-y-6">
-            <div className="card sticky top-24">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">Order Summary</h3>
-
-              <div className="space-y-4 mb-8">
-                <div className="flex justify-between text-gray-600">
-                  <span>Subtotal</span>
-                  <span className="font-medium">${calculateSubtotal().toFixed(2)}</span>
-                </div>
-
-                <div className="flex justify-between text-gray-600">
-                  <span>Processing Fee</span>
-                  <span className="font-medium">${calculateProcessingFee().toFixed(2)}</span>
-                </div>
-
-                <hr className="border-light" />
-
-                <div className="flex justify-between text-2xl font-bold text-gray-900">
-                  <span>Total</span>
-                  <span>${calculateTotal().toFixed(2)}</span>
-                </div>
-
-                <p className="text-xs text-gray-500 leading-relaxed">
-                  Processing fee covers secure payment handling and instant digital delivery
-                </p>
-              </div>
-
-              {/* Terms and Conditions */}
-              <div className="mb-6">
-                <div className="flex items-start gap-3">
-                  <input
-                    id="accept-terms"
-                    name="accept-terms"
-                    type="checkbox"
-                    className="mt-1 h-4 w-4 text-primary focus:ring-primary border-light rounded"
-                    required
-                  />
-                  <label htmlFor="accept-terms" className="text-sm text-gray-600 leading-relaxed">
-                    I agree to the{' '}
-                    <Link to="/terms" className="text-primary hover:text-primary-hover">
-                      Terms of Service
-                    </Link>{' '}
-                    and{' '}
-                    <Link to="/privacy" className="text-primary hover:text-primary-hover">
-                      Privacy Policy
-                    </Link>
-                  </label>
-                </div>
-              </div>
-
-              <button
-                onClick={handleProceedToPayment}
-                disabled={loading}
-                className="btn-primary w-full text-lg py-4"
-              >
-                {loading ? 'Processing...' : 'Pay Now'}
-              </button>
-            </div>
+            <OrderSummaryCard
+              subtotal={calculateSubtotal()}
+              processingFee={calculateProcessingFee()}
+              total={calculateTotal()}
+              onProceed={handleProceedToPayment}
+              loading={loading}
+              buttonText="Pay Now"
+              showTerms={true}
+            />
           </div>
         </div>
       </div>

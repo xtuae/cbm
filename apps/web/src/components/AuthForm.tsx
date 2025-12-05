@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { Card } from './ui';
 
 interface AuthFormProps {
   mode: 'signin' | 'signup';
@@ -75,95 +76,97 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode, onToggleMode }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            {mode === 'signin' ? 'Sign in to your account' : 'Create your account'}
-          </h2>
-          <p className="mt-2 text-center text-muted">
-            {mode === 'signin'
-              ? "Don't have an account? "
-              : "Already have an account? "}
-            <button
-              onClick={onToggleMode}
-              className="font-medium text-primary hover:text-primary-hover"
-            >
-              {mode === 'signin' ? 'Sign up' : 'Sign in'}
-            </button>
-          </p>
-        </div>
-        <form className="mt-8 content-spacing" onSubmit={handleSubmit}>
-          <div className="space-y-0">
-            {mode === 'signup' && (
+    <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full">
+        <Card className="p-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-extrabold text-white">
+              {mode === 'signin' ? 'Sign in to your account' : 'Create your account'}
+            </h2>
+            <p className="mt-2 text-gray-300">
+              {mode === 'signin'
+                ? "Don't have an account? "
+                : "Already have an account? "}
+              <Link
+                to={mode === 'signin' ? '/register' : '/login'}
+                className="font-medium text-indigo-400 hover:text-indigo-300"
+              >
+                {mode === 'signin' ? 'Sign up' : 'Sign in'}
+              </Link>
+            </p>
+          </div>
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+            <div className="space-y-0">
+              {mode === 'signup' && (
+                <div>
+                  <label htmlFor="full-name" className="sr-only">
+                    Full Name
+                  </label>
+                  <input
+                    id="full-name"
+                    name="fullName"
+                    type="text"
+                    required
+                    className="input rounded-b-none"
+                    placeholder="Full Name"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                  />
+                </div>
+              )}
               <div>
-                <label htmlFor="full-name" className="sr-only">
-                  Full Name
+                <label htmlFor="email-address" className="sr-only">
+                  Email address
                 </label>
                 <input
-                  id="full-name"
-                  name="fullName"
-                  type="text"
+                  id="email-address"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
                   required
-                  className="input rounded-b-none"
-                  placeholder="Full Name"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  className={`input ${mode === 'signup' ? 'rounded-t-none rounded-b-none' : 'rounded-b-none'}`}
+                  placeholder="Email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
+              <div>
+                <label htmlFor="password" className="sr-only">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  className={`input ${mode === 'signup' ? 'rounded-t-none' : 'rounded-t-none'}`}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {message && (
+              <div className={`text-center text-sm ${
+                message.includes('Check your email') ? 'text-green-400' : 'text-red-400'
+              }`}>
+                {message}
+              </div>
             )}
-            <div>
-              <label htmlFor="email-address" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="email-address"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className={`input ${mode === 'signup' ? 'rounded-t-none rounded-b-none' : 'rounded-b-none'}`}
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className={`input ${mode === 'signup' ? 'rounded-t-none' : 'rounded-t-none'}`}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </div>
 
-          {message && (
-            <div className={`text-center text-sm ${
-              message.includes('Check your email') ? 'status-success' : 'status-error'
-            }`}>
-              {message}
+            <div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn-primary w-full"
+              >
+                {loading ? 'Please wait...' : (mode === 'signin' ? 'Sign in' : 'Sign up')}
+              </button>
             </div>
-          )}
-
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary w-full"
-            >
-              {loading ? 'Please wait...' : (mode === 'signin' ? 'Sign in' : 'Sign up')}
-            </button>
-          </div>
-        </form>
+          </form>
+        </Card>
       </div>
     </div>
   );

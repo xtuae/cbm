@@ -1,82 +1,91 @@
-import { Link } from 'react-router-dom';
-
 const About = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Breadcrumb */}
-        <nav className="mb-8">
-          <ol className="flex items-center space-x-2 text-sm text-gray-500">
-            <li>
-              <Link to="/" className="hover:text-gray-700">Home</Link>
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-white mb-4">About Us</h1>
+        <p className="text-xl text-gray-300">
+          Revolutionizing digital credits marketplace with secure, instant delivery
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-8 mb-12">
+        <div className="space-y-6">
+          <h2 className="text-2xl font-semibold text-white">Our Mission</h2>
+          <p className="text-gray-300 leading-relaxed">
+            We provide a secure, transparent platform for purchasing and managing digital credits.
+            Our mission is to simplify digital commerce by offering instant credit delivery
+            through traditional payment methods, while maintaining the highest standards of
+            security and user experience.
+          </p>
+          <p className="text-gray-300 leading-relaxed">
+            Every transaction is secured with bank-level encryption, and our platform ensures
+            that credits are allocated instantly upon successful payment verification.
+          </p>
+        </div>
+
+        <div className="space-y-6">
+          <h2 className="text-2xl font-semibold text-white">What We Offer</h2>
+          <ul className="space-y-3 text-gray-300">
+            <li className="flex items-start gap-3">
+              <svg className="w-5 h-5 text-indigo-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              Secure digital credit marketplace
             </li>
-            <li>/</li>
-            <li className="text-gray-900">About Us</li>
-          </ol>
-        </nav>
-
-        {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">About Credits Marketplace</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Your trusted partner for digital credits and marketplace services since 2024.
-          </p>
+            <li className="flex items-start gap-3">
+              <svg className="w-5 h-5 text-indigo-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              Instant credit allocation
+            </li>
+            <li className="flex items-start gap-3">
+              <svg className="w-5 h-5 text-indigo-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              No expiration dates
+            </li>
+            <li className="flex items-start gap-3">
+              <svg className="w-5 h-5 text-indigo-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              Comprehensive credit ledger tracking
+            </li>
+          </ul>
         </div>
+      </div>
 
-        {/* Content */}
-        <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
-          <div className="prose prose-lg mx-auto">
-            <h2>Our Mission</h2>
-            <p>
-              Credits Marketplace is dedicated to providing a secure, transparent, and user-friendly platform
-              for purchasing digital credits and services. We believe in empowering businesses and individuals
-              with reliable digital marketplace solutions that drive growth and innovation.
-            </p>
-
-            <h2>Who We Are</h2>
-            <p>
-              Founded in 2024, Credits Marketplace emerged from a vision to simplify digital commerce.
-              Our experienced team combines expertise in fintech, blockchain, and marketplace operations
-              to deliver cutting-edge solutions for modern digital needs.
-            </p>
-
-            <h2>Our Values</h2>
-            <ul>
-              <li><strong>Security First:</strong> Every transaction is protected by industry-leading security measures</li>
-              <li><strong>Transparency:</strong> Clear pricing, policies, and processes for all users</li>
-              <li><strong>Innovation:</strong> Continuously evolving to meet the changing needs of digital commerce</li>
-              <li><strong>Reliability:</strong> Consistent service and support when our customers need it most</li>
-            </ul>
-
-            <h2>Our Technology</h2>
-            <p>
-              Built on modern web technologies and powered by secure payment processing, our platform
-              ensures that every digital credit purchase is fast, secure, and immediately available.
-              Our infrastructure is designed to handle high volumes while maintaining the highest
-              standards of security and performance.
-            </p>
-
-            <h2>Join Our Community</h2>
-            <p>
-              Thousands of users trust Credits Marketplace for their digital marketplace needs.
-              Join our growing community and experience the difference that secure, reliable
-              digital commerce can make.
-            </p>
+      <div className="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 rounded-lg p-8">
+        <h2 className="text-2xl font-semibold text-white mb-4 text-center">Why Choose Us?</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-white mb-2">Secure Payments</h3>
+            <p className="text-gray-400 text-sm">Bank-level security for all transactions</p>
           </div>
-        </div>
 
-        {/* Contact CTA */}
-        <div className="bg-blue-50 rounded-lg p-8 text-center">
-          <h3 className="text-2xl font-semibold text-gray-900 mb-4">Have Questions?</h3>
-          <p className="text-gray-600 mb-6">
-            We're here to help. Reach out to our team for support with your digital marketplace needs.
-          </p>
-          <Link
-            to="/contact"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition-colors duration-200"
-          >
-            Contact Us
-          </Link>
+          <div className="text-center">
+            <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-white mb-2">Instant Delivery</h3>
+            <p className="text-gray-400 text-sm">Credits added immediately after payment</p>
+          </div>
+
+          <div className="text-center">
+            <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-white mb-2">Quality Guaranteed</h3>
+            <p className="text-gray-400 text-sm">100% satisfaction with every purchase</p>
+          </div>
         </div>
       </div>
     </div>

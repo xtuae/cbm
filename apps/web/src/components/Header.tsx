@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import logo from '../assets/cbm-logo.webp';
 
 const Header = () => {
   const { user, signOut } = useAuth();
@@ -50,37 +51,61 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white border-b border-light sticky top-0 z-50 h-14">
+    <header className="bg-black/20 backdrop-blur-md border-b border-white/10 sticky top-0 z-50 h-16">
       <div className="container-max h-full">
         <div className="flex justify-between items-center h-full">
           {/* Logo - Left */}
           <div className="flex-shrink-0">
             <Link
               to="/"
-              className="text-xl font-semibold text-gray-600 hover:text-primary transition-colors"
+              className="flex items-center text-xl font-semibold text-white hover:text-indigo-400 transition-colors"
             >
-              Credits Marketplace
+              <img src={logo} alt="Credits Marketplace" className="h-8 w-auto" />
             </Link>
           </div>
 
           {/* Navigation Links - Center */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link
+              to="/"
+              className={`text-sm font-medium transition-colors ${
+                location.pathname === '/'
+                  ? 'text-indigo-400'
+                  : 'text-gray-300 hover:text-indigo-400'
+              }`}
+            >
+              Home
+            </Link>
+            <Link
               to="/marketplace"
               className={`text-sm font-medium transition-colors ${
                 location.pathname.startsWith('/marketplace')
-                  ? 'text-primary'
-                  : 'text-gray-600 hover:text-primary'
+                  ? 'text-indigo-400'
+                  : 'text-gray-300 hover:text-indigo-400'
               }`}
             >
-              Browse Marketplace
+              Marketplace
             </Link>
-            <button
-              onClick={() => alert('Pricing & How it Works coming soon!')}
-              className="text-sm font-medium text-gray-600 hover:text-primary transition-colors"
+            <Link
+              to="/about"
+              className={`text-sm font-medium transition-colors ${
+                location.pathname === '/about'
+                  ? 'text-indigo-400'
+                  : 'text-gray-300 hover:text-indigo-400'
+              }`}
             >
-              Pricing & How it Works
-            </button>
+              About
+            </Link>
+            <Link
+              to="/contact"
+              className={`text-sm font-medium transition-colors ${
+                location.pathname === '/contact'
+                  ? 'text-indigo-400'
+                  : 'text-gray-300 hover:text-indigo-400'
+              }`}
+            >
+              Contact
+            </Link>
           </nav>
 
           {/* Right Side Actions */}
@@ -88,13 +113,13 @@ const Header = () => {
             {/* Cart Icon with Badge */}
             <Link
               to="/cart"
-              className="relative text-gray-600 hover:text-primary transition-colors p-2"
+              className="relative text-gray-300 hover:text-indigo-400 transition-colors p-2"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5H6M7 13l1.1-5m1.4 0H17m-9.5-1H3" />
               </svg>
               {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-medium rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-xs font-medium rounded-full h-5 w-5 flex items-center justify-center">
                   {cartItemCount > 99 ? '99+' : cartItemCount}
                 </span>
               )}
@@ -105,14 +130,15 @@ const Header = () => {
               <div className="relative">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors p-2"
+                  className="flex items-center space-x-2 bg-white/10 rounded-full px-3 py-2 hover:bg-white/20 transition-colors"
                 >
-                  <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                    <span className="text-sm font-medium text-gray-600">
+                  <div className="w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center">
+                    <span className="text-xs font-medium text-white">
                       {user.email?.charAt(0).toUpperCase() || 'U'}
                     </span>
                   </div>
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <span className="text-sm text-gray-300 hidden sm:block">Dashboard</span>
+                  <svg className="h-4 w-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
@@ -127,22 +153,22 @@ const Header = () => {
                     ></div>
 
                     {/* Dropdown */}
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-card border border-light z-50">
+                    <div className="absolute right-0 mt-2 w-48 bg-black/80 backdrop-blur-md rounded-lg shadow-2xl border border-white/10 z-50">
                       <div className="py-2">
-                        <div className="px-4 py-2 text-sm text-gray-600 border-b border-light">
+                        <div className="px-4 py-2 text-sm text-gray-300 border-b border-white/10">
                           <div className="font-medium">{user.email}</div>
-                          <div className="text-xs text-gray-500">Signed in</div>
+                          <div className="text-xs text-gray-400">Signed in</div>
                         </div>
                         <Link
                           to="/dashboard"
-                          className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-primary transition-colors"
+                          className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/10 transition-colors"
                           onClick={() => setUserMenuOpen(false)}
                         >
                           Dashboard
                         </Link>
                         <button
                           onClick={handleSignOut}
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-primary transition-colors"
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-white/10 transition-colors"
                         >
                           Sign Out
                         </button>
@@ -155,16 +181,16 @@ const Header = () => {
               /* Auth Buttons - Logged Out */
               <div className="flex items-center space-x-4">
                 <Link
-                  to="/" // This will redirect to auth form via App.tsx routing
-                  className="text-gray-600 hover:text-primary text-sm font-medium transition-colors px-3 py-2"
+                  to="/login"
+                  className="text-gray-300 hover:text-indigo-400 text-sm font-medium transition-colors px-3 py-2 border border-white/20 rounded-md"
                 >
                   Sign In
                 </Link>
                 <Link
-                  to="/" // This will redirect to auth form via App.tsx routing
-                  className="bg-primary hover:bg-primary-hover text-white px-4 py-2 text-sm font-medium rounded-md transition-colors"
+                  to="/register"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors"
                 >
-                  Sign Up
+                  Get Credits
                 </Link>
               </div>
             )}

@@ -1,174 +1,114 @@
-import { Link } from 'react-router-dom';
-
 const Terms = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Breadcrumb */}
-        <nav className="mb-8">
-          <ol className="flex items-center space-x-2 text-sm text-gray-500">
-            <li>
-              <Link to="/" className="hover:text-gray-700">Home</Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link to="/policies" className="hover:text-gray-700">Policies</Link>
-            </li>
-            <li>/</li>
-            <li className="text-gray-900">Terms of Use & Compliance Policy</li>
-          </ol>
-        </nav>
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-white mb-4">Terms of Service</h1>
+        <p className="text-xl text-gray-300">
+          Please read these terms carefully before using our services
+        </p>
+      </div>
 
-        {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Terms of Use & Compliance Policy</h1>
-          <p className="text-lg text-gray-600">
-            Effective Date: January 1, 2024 | Last Updated: {new Date().toLocaleDateString()}
+      <div className="space-y-8 text-gray-300">
+        <div>
+          <h2 className="text-2xl font-semibold text-white mb-4">1. Acceptance of Terms</h2>
+          <p className="leading-relaxed">
+            By accessing and using the Digital Credits Marketplace ("the Service"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
           </p>
         </div>
 
-        {/* Content */}
-        <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
-          <div className="prose prose-lg max-w-none">
-
-            <h2>1. Acceptance of Terms</h2>
-            <p>
-              By accessing and using Credits Marketplace ("Platform"), you accept and agree to be bound by
-              the terms and provision of this agreement. If you do not agree to abide by the above, please
-              do not use this service.
-            </p>
-
-            <h2>2. Description of Service</h2>
-            <p>
-              Credits Marketplace provides a digital marketplace where users can purchase credits for various
-              digital services and products. Our platform facilitates secure transactions and instant delivery
-              of digital goods.
-            </p>
-
-            <h2>3. User Accounts</h2>
-            <h3>3.1 Account Creation</h3>
-            <p>
-              To access certain features of our Platform, you must create an account. You agree to provide
-              accurate, current, and complete information about yourself during the registration process.
-            </p>
-
-            <h3>3.2 Account Security</h3>
-            <p>
-              You are responsible for maintaining the confidentiality of your account credentials and for all
-              activities that occur under your account. You agree to immediately notify us of any unauthorized
-              use of your account or any other breach of security.
-            </p>
-
-            <h2>4. Digital Credits and Purchases</h2>
-            <h3>4.1 Credit Purchases</h3>
-            <p>
-              All purchases of digital credits are final and non-refundable. Credits are delivered instantly
-              upon successful payment confirmation and are valid indefinitely unless otherwise specified.
-            </p>
-
-            <h3>4.2 Credit Usage</h3>
-            <p>
-              Digital credits can only be used for legitimate digital services available through our platform.
-              Credits cannot be exchanged for cash, transferred to other users, or used for any illegal activities.
-            </p>
-
-            <h2>5. Payment and Billing</h2>
-            <h3>5.1 Payment Methods</h3>
-            <p>
-              We accept major credit cards, debit cards, PayPal, and other approved payment processors.
-              All payments are processed securely through SSL encryption.
-            </p>
-
-            <h3>5.2 Billing Information</h3>
-            <p>
-              You agree to provide accurate billing information and authorize us to charge your payment method
-              for purchases made on our platform. You are responsible for any applicable taxes.
-            </p>
-
-            <h2>6. Acceptable Use Policy</h2>
-            <p>You agree not to use our platform to:</p>
-            <ul>
-              <li>Violate any applicable laws or regulations</li>
-              <li>Transmit harmful or malicious code</li>
-              <li>Attempt to gain unauthorized access to our systems</li>
-              <li>Interfere with the proper functioning of our platform</li>
-              <li>Use credits for fraudulent or illegal activities</li>
-              <li>Harass, abuse, or harm other users</li>
-            </ul>
-
-            <h2>7. Intellectual Property</h2>
-            <p>
-              All content, features, and functionality of Credits Marketplace are owned by us or our licensors
-              and are protected by copyright, trademark, and other intellectual property laws. You may not
-              reproduce, distribute, or create derivative works without our express written permission.
-            </p>
-
-            <h2>8. Privacy and Data Protection</h2>
-            <p>
-              Your privacy is important to us. Our collection and use of personal information is governed by
-              our Privacy Policy, which is incorporated into these terms by reference.
-            </p>
-
-            <h2>9. Limitation of Liability</h2>
-            <p>
-              To the maximum extent permitted by applicable law, Credits Marketplace shall not be liable for
-              any indirect, incidental, special, consequential, or punitive damages arising out of or relating
-              to your use of the platform.
-            </p>
-
-            <h2>10. Termination</h2>
-            <p>
-              We reserve the right to terminate or suspend your account and access to our platform at our
-              sole discretion, without notice, for conduct that we believe violates these terms or is harmful
-              to other users, us, or third parties.
-            </p>
-
-            <h2>11. Governing Law</h2>
-            <p>
-              These terms shall be governed by and construed in accordance with the laws of [Jurisdiction],
-              without regard to its conflict of law provisions.
-            </p>
-
-            <h2>12. Changes to Terms</h2>
-            <p>
-              We reserve the right to modify these terms at any time. We will notify users of significant
-              changes via email or through our platform. Continued use of our platform after such modifications
-              constitutes acceptance of the updated terms.
-            </p>
-
-            <h2>13. Contact Information</h2>
-            <p>
-              If you have any questions about these Terms of Use, please contact us at:
-            </p>
-            <ul>
-              <li>Email: legal@creditsmarketplace.com</li>
-              <li>Address: [Company Address]</li>
-            </ul>
-
-          </div>
+        <div>
+          <h2 className="text-2xl font-semibold text-white mb-4">2. Use License</h2>
+          <p className="leading-relaxed mb-4">
+            Permission is granted to temporarily access the materials (information or software) on the Digital Credits Marketplace for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
+          </p>
+          <ul className="list-disc list-inside space-y-2 ml-4">
+            <li>Modify or copy the materials</li>
+            <li>Use the materials for any commercial purpose or for any public display (commercial or non-commercial)</li>
+            <li>Attempt to decompile or reverse engineer any software contained on the Service</li>
+            <li>Remove any copyright or other proprietary notations from the materials</li>
+          </ul>
         </div>
 
-        {/* Bottom Section */}
-        <div className="bg-blue-50 rounded-lg p-8">
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">Need Help Understanding These Terms?</h3>
-          <p className="text-gray-600 mb-6">
-            If you have questions about our terms of service or need clarification on any section,
-            our support team is here to help.
+        <div>
+          <h2 className="text-2xl font-semibold text-white mb-4">3. Digital Credits</h2>
+          <p className="leading-relaxed mb-4">
+            Digital credits purchased through our marketplace are non-refundable. Once credits are allocated to your account, they become your property and can be used according to our platform's rules.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link
-              to="/contact"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition-colors duration-200 text-center"
-            >
-              Contact Support
-            </Link>
-            <Link
-              to="/policies/privacy"
-              className="bg-white hover:bg-gray-50 text-blue-600 px-6 py-3 rounded-md font-medium border border-blue-600 transition-colors duration-200 text-center"
-            >
-              Read Privacy Policy
-            </Link>
-          </div>
+          <p className="leading-relaxed">
+            Credits do not expire and remain valid indefinitely. However, we reserve the right to modify credit values or availability at our discretion.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-semibold text-white mb-4">4. Payment Terms</h2>
+          <p className="leading-relaxed mb-4">
+            All payments are processed securely through our payment partners. By making a payment, you agree to our payment processing terms and conditions.
+          </p>
+          <p className="leading-relaxed">
+            Prices are subject to change without notice. The price charged will be the price in effect at the time of purchase.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-semibold text-white mb-4">5. User Accounts</h2>
+          <p className="leading-relaxed mb-4">
+            When you create an account with us, you must provide information that is accurate, complete, and current at all times. You are responsible for safeguarding the password and for all activities that occur under your account.
+          </p>
+          <p className="leading-relaxed">
+            You agree not to disclose your password to any third party. You must notify us immediately upon becoming aware of any breach of security or unauthorized use of your account.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-semibold text-white mb-4">6. Prohibited Uses</h2>
+          <p className="leading-relaxed mb-4">
+            You may not use our service:
+          </p>
+          <ul className="list-disc list-inside space-y-2 ml-4">
+            <li>For any unlawful purpose or to solicit others to perform unlawful acts</li>
+            <li>To violate any international, federal, provincial, or state regulations, rules, laws, or local ordinances</li>
+            <li>To infringe upon or violate our intellectual property rights or the intellectual property rights of others</li>
+            <li>To harass, abuse, insult, harm, defame, slander, disparage, intimidate, or discriminate</li>
+            <li>To submit false or misleading information</li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-semibold text-white mb-4">7. Termination</h2>
+          <p className="leading-relaxed">
+            We may terminate or suspend your account and bar access to the service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever and without limitation, including but not limited to a breach of the Terms.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-semibold text-white mb-4">8. Limitation of Liability</h2>
+          <p className="leading-relaxed">
+            In no event shall Digital Credits Marketplace, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of the service.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-semibold text-white mb-4">9. Governing Law</h2>
+          <p className="leading-relaxed">
+            These Terms shall be interpreted and governed by the laws of the jurisdiction in which our company is incorporated, without regard to conflict of law provisions.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-semibold text-white mb-4">10. Changes to Terms</h2>
+          <p className="leading-relaxed">
+            We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days notice prior to any new terms taking effect.
+          </p>
+        </div>
+
+        <div className="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-white mb-4">Contact Information</h2>
+          <p className="text-gray-300">
+            If you have any questions about these Terms of Service, please contact us at{' '}
+            <a href="mailto:legal@creditsmarketplace.com" className="text-indigo-400 hover:text-indigo-300">
+              legal@creditsmarketplace.com
+            </a>
+          </p>
         </div>
       </div>
     </div>

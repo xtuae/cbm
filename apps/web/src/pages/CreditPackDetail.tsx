@@ -6,6 +6,12 @@ import Breadcrumb from '../components/Breadcrumb';
 import WishlistButton from '../components/WishlistButton';
 import { ProductDetailSkeleton } from '../components/Skeletons';
 import { RichTextDisplay } from '../components/RichTextEditor';
+import { Card, Badge } from '../components/ui';
+import PackGallery from '../components/product/PackGallery';
+import PackInfoPanel from '../components/product/PackInfoPanel';
+import ProductTabs from '../components/product/ProductTabs';
+import SuggestedPacks from '../components/product/SuggestedPacks';
+import Layout from '../components/Layout';
 
 interface Category {
   id: string;
@@ -40,7 +46,6 @@ const CreditPackDetail = () => {
   const [creditPack, setCreditPack] = useState<CreditPack | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
-  const [selectedTab, setSelectedTab] = useState('description');
   const [processingId, setProcessingId] = useState<string | null>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -119,7 +124,7 @@ const CreditPackDetail = () => {
     localStorage.setItem('cart', JSON.stringify(currentCart));
   };
 
-  const handlePurchase = async (method: 'buy' | 'cart') => {
+  const handlePurchase = async (method: 'buy' | 'cart', qty: number = quantity) => {
     if (!creditPack) return;
 
     if (method === 'cart') {
@@ -203,43 +208,45 @@ const CreditPackDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Breadcrumb skeleton */}
-          <div className="mb-8">
-            <div className="flex items-center space-x-2">
-              <div className="h-4 bg-gray-200 rounded w-20"></div>
-              <div className="h-4 bg-gray-200 rounded w-16"></div>
-              <div className="h-4 bg-gray-200 rounded w-24"></div>
+      <>
+        <section className="py-24">
+          <div className="container-max">
+            {/* Breadcrumb skeleton */}
+            <div className="mb-8">
+              <div className="flex items-center space-x-2">
+                <div className="h-4 bg-gray-700 rounded w-20"></div>
+                <div className="h-4 bg-gray-700 rounded w-16"></div>
+                <div className="h-4 bg-gray-700 rounded w-24"></div>
+              </div>
             </div>
+            <ProductDetailSkeleton />
           </div>
-          <ProductDetailSkeleton />
-        </div>
-      </div>
+        </section>
+      </>
     );
   }
 
   if (!creditPack) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center">
-            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <>
+        <section className="py-24">
+          <div className="container-max text-center">
+            <svg className="mx-auto h-12 w-12 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.29-.98-5.709-2.373C6.288 12.045 7.05 12 7.828 12H12.2" />
             </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">Credit pack not found</h3>
-            <p className="mt-1 text-sm text-gray-500">The credit pack you're looking for doesn't exist.</p>
+            <h3 className="mt-2 text-sm font-medium text-white">Credit pack not found</h3>
+            <p className="mt-1 text-sm text-gray-400">The credit pack you're looking for doesn't exist.</p>
             <div className="mt-6">
               <Link
                 to="/marketplace"
-                className="text-blue-600 hover:text-blue-500"
+                className="text-indigo-400 hover:text-indigo-300"
               >
                 ← Back to Marketplace
               </Link>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </>
     );
   }
 
@@ -272,147 +279,62 @@ const CreditPackDetail = () => {
   const isOnSale = creditPack.is_featured;
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="container-max py-8">
-        {/* Breadcrumb */}
-        <Breadcrumb items={breadcrumbItems} />
+    <>
+      <section className="py-24">
+        <div className="container-max">
+          {/* Breadcrumb */}
+          <Breadcrumb items={breadcrumbItems} />
+          <div className="mb-8"></div>
 
-        {/* Two Column Layout */}
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
-          {/* Left: Big product image + gallery */}
-          <div className="space-y-4">
-            <div className="aspect-square bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg flex items-center justify-center">
-              <svg className="w-32 h-32 text-primary/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
+          {/* Two Column Layout */}
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+            {/* Left: Pack Gallery */}
+            <PackGallery
+              images={creditPack.gallery_urls || []}
+              name={creditPack.name}
+            />
 
-            {/* Gallery thumbnails would go here */}
-            <div className="flex gap-2">
-              {/* Placeholder thumbnails */}
-              <div className="w-16 h-16 bg-gray-100 rounded border-2 border-gray-200 cursor-pointer"></div>
-              <div className="w-16 h-16 bg-gray-100 rounded border-2 border-primary cursor-pointer"></div>
-              <div className="w-16 h-16 bg-gray-100 rounded border-2 border-gray-200 cursor-pointer"></div>
-            </div>
-          </div>
-
-          {/* Right: Product details */}
-          <div className="space-y-6">
-            {/* Product name (H1) */}
-            <div className="flex items-start justify-between">
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                {creditPack.name}
-              </h1>
-              <WishlistButton
-                creditPackId={creditPack.id}
-                variant="default"
-                size="md"
-              />
-            </div>
-
-            {/* Price */}
-            <div className="text-5xl font-bold text-gray-900">
-              ${creditPack.price_usd.toFixed(2)}
-            </div>
-
-            {/* Credits */}
-            <div className="text-xl text-primary font-semibold">
-              {creditPack.credit_amount.toLocaleString()} Digital Credits
-            </div>
-
-            {/* Short description */}
-            <div className="text-lg text-gray-600 leading-relaxed max-w-md">
-              {creditPack.short_description || creditPack.description || 'Secure digital credits for premium platform services.'}
-            </div>
-
-            {/* Category badges */}
-            {creditPack.categories && creditPack.categories.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {creditPack.categories.map((category) => (
-                  <span
-                    key={category.id}
-                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700"
-                  >
-                    {category.name}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {/* Add to Cart / Buy Now */}
-            <div className="flex gap-4 pt-4">
-              <button
-                onClick={() => handlePurchase('cart')}
-                className="btn-secondary flex-1"
-              >
-                Add to Cart
-              </button>
-              <button
-                onClick={() => handlePurchase('buy')}
-                disabled={processingId === creditPack.id}
-                className="btn-primary flex-1"
-              >
-                {processingId === creditPack.id ? 'Processing...' : 'Buy Now'}
-              </button>
-            </div>
+            {/* Right: Pack Info Panel */}
+            <PackInfoPanel
+              pack={creditPack}
+              onAddToCart={(qty) => handlePurchase('cart', qty)}
+              onBuyNow={(qty) => handlePurchase('buy', qty)}
+              loading={processingId === creditPack.id}
+            />
           </div>
         </div>
+      </section>
 
-        {/* Below: Divider + Long description */}
-        <div className="mt-16 pt-12 border-t border-light">
-          <div className="prose prose-lg max-w-none">
-            {creditPack.long_description ? (
-              <RichTextDisplay content={creditPack.long_description} />
-            ) : (
-              <div className="space-y-6">
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  This credit pack contains {creditPack.credit_amount.toLocaleString()} digital credits that can be redeemed for premium services on our platform.
-                </p>
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  Credits provide instant access to digital goods and services without traditional payment processing. All purchases are secured with enterprise-grade encryption.
-                </p>
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  Start using your credits immediately or save them for future premium service purchases across our entire platform ecosystem.
-                </p>
-              </div>
-            )}
-          </div>
+      {/* Tabs Section */}
+      <section className="py-16">
+        <div className="container-max">
+          <ProductTabs
+            description={creditPack.description}
+            longDescription={creditPack.long_description}
+            creditAmount={creditPack.credit_amount}
+          />
+        </div>
+      </section>
 
-          {/* Optional feature bullets */}
-          <div className="mt-12 grid md:grid-cols-3 gap-8">
-            <div className="flex items-start gap-3">
-              <svg className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <div>
-                <h3 className="font-semibold text-gray-900">Instant Delivery</h3>
-                <p className="text-sm text-gray-600 mt-1">Credits added immediately upon payment verification</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <svg className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-              <div>
-                <h3 className="font-semibold text-gray-900">Secure Payment</h3>
-                <p className="text-sm text-gray-600 mt-1">Bank-level encryption and fraud protection</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <svg className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              <div>
-                <h3 className="font-semibold text-gray-900">Never Expires</h3>
-                <p className="text-sm text-gray-600 mt-1">Credits remain valid indefinitely for future use</p>
-              </div>
-            </div>
+      {/* Suggested Packs Carousel */}
+      <section className="py-16">
+        <div className="container-max">
+          <h2 className="text-3xl font-bold text-white mb-8 text-center">You might also like</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {Array.from({ length: 3 }, (_, i) => (
+              <Card key={i} className="p-6 hover:scale-105 transition-transform cursor-pointer">
+                <div className="w-full h-32 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg mb-4 flex items-center justify-center">
+                  <span className="text-3xl">💎</span>
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-1">Similar Credit Pack</h3>
+                <p className="text-gray-400 text-sm mb-2">500 Credits</p>
+                <div className="text-xl font-bold text-indigo-400">$29.99</div>
+              </Card>
+            ))}
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </>
   );
 };
 

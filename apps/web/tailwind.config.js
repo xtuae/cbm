@@ -8,12 +8,14 @@ export default {
     extend: {
       colors: {
         // Design System Colors
-        'primary': '#0071E3', // Primary CTA color
-        'primary-hover': '#005BB5',
+        'primary': '#6E5CFF', // Indigo accent
+        'primary-600': '#5a47f0',
+        'bg-dark-900': '#0b0f1a', // Page background
+        'bg-900': '#0f1630', // Sections
+        'glass': 'rgba(255,255,255,0.03)',
+        'muted': '#98A0B3',
         'danger': '#FF3B30', // Error/danger color
         'danger-hover': '#D63027',
-        'subtle': '#F9F9F9', // Subtle background gray
-        'light': '#E5E5E7', // Light border gray
         // Extended grays for comprehensive coverage
         'gray': {
           50: '#F9F9F9',
@@ -50,8 +52,8 @@ export default {
         // Consistent border radius
         'sm': '0.375rem', // 6px for small elements
         'md': '0.5rem',   // 8px for inputs/buttons
-        'lg': '0.625rem', // 10px for cards
-        'xl': '0.75rem',  // 12px for larger elements
+        'lg': '1rem',     // 16px for cards
+        'xl': '1.5rem',   // 24px for larger elements
       },
       boxShadow: {
         'subtle': '0 2px 10px rgba(0, 0, 0, 0.1)',

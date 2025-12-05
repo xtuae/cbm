@@ -1,14 +1,36 @@
 import React from 'react';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  error?: boolean;
+  label?: string;
+  error?: string;
+  className?: string;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ error, className = '', ...props }, ref) => {
-    const classes = `${error ? 'input-error' : 'input'} ${className}`.trim();
+  ({ label, error, className = '', id, ...props }, ref) => {
+    const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+    const inputClasses = `input ${error ? 'input-error' : ''} ${className}`.trim();
 
-    return <input ref={ref} className={classes} {...props} />;
+    return (
+      <div className="form-group">
+        {label && (
+          <label htmlFor={inputId} className="form-label">
+            {label}
+          </label>
+        )}
+        <input
+          ref={ref}
+          id={inputId}
+          className={inputClasses}
+          {...props}
+        />
+        {error && (
+          <p className="form-error">
+            {error}
+          </p>
+        )}
+      </div>
+    );
   }
 );
 
