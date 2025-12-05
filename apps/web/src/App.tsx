@@ -3,32 +3,17 @@ import { BrowserRouter } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 import MainLayout from './components/Layout';
 import DashboardLayout from './components/DashboardLayout';
-import AdminLayout from './layouts/AdminLayout';
 import Landing from './pages/Landing';
 import BrowseMarketplace from './pages/BrowseMarketplace';
 import CreditPackDetail from './pages/CreditPackDetail';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Payment from './pages/Payment';
-import Dashboard from './pages/Dashboard';
-import OrdersHistory from './pages/OrdersHistory';
-import CreditLedger from './pages/CreditLedger';
-import WalletManagement from './pages/WalletManagement';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import UsersList from './pages/admin/UsersList';
-import CategoriesManagement from './pages/admin/CategoriesManagement';
-import CreditPacksManagement from './pages/admin/CreditPacksManagement';
-import PagesManagement from './pages/admin/PagesManagement';
-import NilaSettlements from './pages/admin/NilaSettlements';
-import CreateSettlement from './pages/admin/CreateSettlement';
-import AdminActivityLog from './pages/admin/AdminActivityLog';
-import AdminLogin from './pages/admin/AdminLogin';
 import RequireAuth from './components/auth/RequireAuth';
-import RequireAdmin from './components/auth/RequireAdmin';
 import AuthForm from './components/AuthForm';
 
 function AppContent() {
@@ -48,9 +33,6 @@ function AppContent() {
 
   return (
     <Routes>
-      {/* Admin Login - Separate from all layouts */}
-      <Route path="/admin/login" element={<AdminLogin />} />
-
       {/* Main Layout for public + user pages */}
       <Route path="/" element={<MainLayout />}>
         {/* Landing/Home Page */}
@@ -99,8 +81,8 @@ function AppContent() {
         />
 
         {/* Authentication Pages */}
-        <Route path="login" element={<AuthForm mode="signin" onToggleMode={() => {}} />} />
-        <Route path="register" element={<AuthForm mode="signup" onToggleMode={() => {}} />} />
+        <Route path="login" element={<AuthForm mode="signin" />} />
+        <Route path="register" element={<AuthForm mode="signup" />} />
 
         {/* Static Pages */}
         <Route path="about" element={<About />} />
@@ -110,25 +92,6 @@ function AppContent() {
 
         {/* 404 Page - must be last */}
         <Route path="*" element={<div className="p-8 text-center"><h1 className="text-3xl font-bold text-gray-900">404 - Page Not Found</h1></div>} />
-      </Route>
-
-      {/* Admin Layout for all admin routes */}
-      <Route
-        path="/admin"
-        element={
-          <RequireAdmin>
-            <AdminLayout />
-          </RequireAdmin>
-        }
-      >
-        <Route index element={<AdminDashboard />} />
-        <Route path="users" element={<UsersList />} />
-        <Route path="categories" element={<CategoriesManagement />} />
-        <Route path="credit-packs" element={<CreditPacksManagement />} />
-        <Route path="pages" element={<PagesManagement />} />
-        <Route path="settlements" element={<NilaSettlements />} />
-        <Route path="settlements/create" element={<CreateSettlement />} />
-        <Route path="activity" element={<AdminActivityLog />} />
       </Route>
     </Routes>
   );

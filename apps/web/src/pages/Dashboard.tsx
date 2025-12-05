@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import WishlistButton from '../components/WishlistButton';
 import { EmptyWishlist } from '../components/EmptyState';
 

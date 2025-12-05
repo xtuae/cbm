@@ -1,4 +1,3 @@
-import React from 'react';
 import { ProductGridSkeleton, ProductDetailSkeleton, OrdersListSkeleton, TableRowSkeleton, FormSkeleton } from './Skeletons';
 
 interface LoadingStateProps {

@@ -1,6 +1,6 @@
 import { useAuth } from '../../contexts/AuthContext';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { type ReactNode, useEffect } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import { type ReactNode } from 'react';
 
 interface RequireAuthProps {
   children: ReactNode;
@@ -9,7 +9,6 @@ interface RequireAuthProps {
 const RequireAuth = ({ children }: RequireAuthProps) => {
   const { user, loading } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
 
   // Show loading screen while authentication initializes
   if (loading) {

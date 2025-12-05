@@ -1,7 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { useAuth } from '../contexts/AuthContext';
 import FiltersBar from '../components/marketplace/FiltersBar';
 import ProductGrid from '../components/marketplace/ProductGrid';
 
@@ -53,8 +51,6 @@ const BrowseMarketplace = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState('recommended');
-  const { user } = useAuth();
-  const navigate = useNavigate();
 
   // Fetch categories and credit packs with fallback to placeholder data
   const fetchCategories = useCallback(async () => {

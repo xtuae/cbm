@@ -3,15 +3,11 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import Breadcrumb from '../components/Breadcrumb';
-import WishlistButton from '../components/WishlistButton';
 import { ProductDetailSkeleton } from '../components/Skeletons';
-import { RichTextDisplay } from '../components/RichTextEditor';
-import { Card, Badge } from '../components/ui';
+import { Card } from '../components/ui';
 import PackGallery from '../components/product/PackGallery';
 import PackInfoPanel from '../components/product/PackInfoPanel';
 import ProductTabs from '../components/product/ProductTabs';
-import SuggestedPacks from '../components/product/SuggestedPacks';
-import Layout from '../components/Layout';
 
 interface Category {
   id: string;

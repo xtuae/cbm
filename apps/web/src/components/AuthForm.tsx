@@ -5,10 +5,9 @@ import { Card } from './ui';
 
 interface AuthFormProps {
   mode: 'signin' | 'signup';
-  onToggleMode: () => void;
 }
 
-const AuthForm: React.FC<AuthFormProps> = ({ mode, onToggleMode }) => {
+const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -28,9 +27,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode, onToggleMode }) => {
     const from = typeof state?.from === 'string' ? state.from : undefined;
 
     let defaultTarget = '/dashboard';
-    if (user.role === 'admin') {
-      defaultTarget = '/admin';
-    }
 
     const redirectTo = from || defaultTarget;
     navigate(redirectTo, { replace: true });
@@ -60,9 +56,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode, onToggleMode }) => {
           const from = typeof state?.from === 'string' ? state.from : undefined;
 
           let defaultTarget = '/dashboard';
-          if (user?.role === 'admin') {
-            defaultTarget = '/admin';
-          }
 
           const redirectTo = from || defaultTarget;
           navigate(redirectTo, { replace: true });

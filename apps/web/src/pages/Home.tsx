@@ -7,7 +7,7 @@ const Home = () => {
         </h1>
         <p className="text-lg text-gray-600 mb-8">
           Purchase platform credits using traditional payment methods.
-          All settlements are managed internally by administrators.
+          All settlements are processed securely through blockchain technology.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white overflow-hidden shadow rounded-lg">
@@ -63,7 +63,7 @@ const Home = () => {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 truncate">
-                      Admin Settlements
+                      Blockchain Settlements
                     </dt>
                     <dd className="text-lg font-medium text-gray-900">
                       Blockchain Rewards

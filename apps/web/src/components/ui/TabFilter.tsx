@@ -1,4 +1,3 @@
-import React from 'react';
 
 interface TabFilterProps {
   tabs: { label: string; value: string }[];
