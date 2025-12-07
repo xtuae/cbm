@@ -1,8 +1,10 @@
 {
-  "outputDirectory": ".",
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
   "functions": {
     "api/*.ts": {
-      "runtime": "nodejs22.x"
+      "runtime": "nodejs20.x",
+      "maxDuration": 10
     }
   }
 }
