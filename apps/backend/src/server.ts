@@ -1,10 +1,11 @@
 import dotenv from 'dotenv';
 
-// Load environment variables first
-dotenv.config();
+// Load environment variables first (for local development)
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
 
 import express, { Request, Response } from 'express';
-import serverless from "serverless-http";
 import authRoutes from './routes/auth.js';
 import categoriesRoutes from './routes/categories.js';
 import creditPackRoutes from './routes/credit-packs.js';
@@ -20,7 +21,6 @@ import adminRoutes from './routes/admin.js';
 import { errorHandler, logRequest, unhandledException, unhandledRejection } from './lib/errorHandler.js';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
@@ -55,4 +55,17 @@ app.get('/health', (req: Request, res: Response) => {
 // Global error handling middleware (must be last)
 app.use(errorHandler);
 
-export const handler = serverless(app);
+// Export the app for serverless use
+export { app };
+
+// Start server only for local development
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3000;
+  // Handle uncaught exceptions and unhandled promise rejections (for local dev)
+  process.on('uncaughtException', unhandledException);
+  process.on('unhandledRejection', unhandledRejection);
+
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
