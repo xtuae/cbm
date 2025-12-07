@@ -1,1 +1,16 @@
-apps/web/**
+# Ignore frontend when deploying backend project
+apps/web/
+
+# Do NOT ignore backend files
+!apps/backend/
+!apps/backend/**
+
+# Do NOT ignore api functions
+!apps/backend/api/
+!apps/backend/api/**
+
+# Allow package.json, tsconfig, source folders
+!apps/backend/package.json
+!apps/backend/tsconfig.json
+!apps/backend/src/
+!apps/backend/src/**
