@@ -1,7 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { app } from '../src/server.js';
+import app from '../src/app.js';
+import { Server } from 'http';
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
-  // Express app is a request handler, so just pass req/res through
-  return (app as any)(req, res);
-}
+const server = app as unknown as Server;
+
+export default (req: VercelRequest, res: VercelResponse) => {
+  return server.emit('request', req, res);
+};
