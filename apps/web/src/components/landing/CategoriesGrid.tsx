@@ -1,28 +1,63 @@
-import { Card } from '../ui';
+import { useEffect, useState } from 'react';
+import { supabase } from '../../lib/supabase';
+import { Chip } from '../ui';
+
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
 
 const CategoriesGrid = () => {
-  const categories = [
-    { name: 'Game Credits', desc: 'Top up gaming accounts', icon: '🎮' },
-    { name: 'Cloud & SaaS', desc: 'Hosting and software credits', icon: '☁️' },
-    { name: 'Gift Cards', desc: 'Digital gift certificates', icon: '🎁' },
-    { name: 'Business Tools', desc: 'Productivity and automation', icon: '💼' }
-  ];
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        // TODO: If API endpoint exists, use /api/categories instead
+        const { data, error } = await supabase
+          .from('categories')
+          .select('*')
+          .order('name', { ascending: true });
+
+        if (error || !data || data.length === 0) {
+          // Fallback to static categories
+          setCategories([
+            { id: 'game-credits', name: 'Game Credits', slug: 'game-credits' },
+            { id: 'cloud-services', name: 'Cloud Services', slug: 'cloud-services' },
+            { id: 'productivity-apps', name: 'Productivity Apps', slug: 'productivity-apps' },
+            { id: 'advertising-credits', name: 'Advertising Credits', slug: 'advertising-credits' },
+            { id: 'api-services', name: 'API Services', slug: 'api-services' },
+            { id: 'data-storage', name: 'Data Storage', slug: 'data-storage' },
+          ]);
+        } else {
+          setCategories(data);
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        // Use fallback
+        setCategories([
+          { id: 'game-credits', name: 'Game Credits', slug: 'game-credits' },
+          { id: 'cloud-services', name: 'Cloud Services', slug: 'cloud-services' },
+          { id: 'productivity-apps', name: 'Productivity Apps', slug: 'productivity-apps' },
+          { id: 'advertising-credits', name: 'Advertising Credits', slug: 'advertising-credits' },
+          { id: 'api-services', name: 'API Services', slug: 'api-services' },
+          { id: 'data-storage', name: 'Data Storage', slug: 'data-storage' },
+        ]);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   return (
-    <section className="py-16">
+    <section className="py-8">
       <div className="container-max">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-white mb-4">All Categories</h2>
-          <p className="text-gray-400">Find the perfect credit pack for your needs</p>
-        </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.map((category) => (
-            <Card key={category.name} className="p-6 text-center hover:scale-105 transition-transform cursor-pointer">
-              <div className="text-4xl mb-4">{category.icon}</div>
-              <h3 className="text-xl font-semibold text-white mb-2">{category.name}</h3>
-              <p className="text-gray-400 mb-4">{category.desc}</p>
-              <button className="btn-secondary w-full">Browse</button>
-            </Card>
+        <div className="flex space-x-4 overflow-x-auto pb-4 justify-center">
+          {categories.map((brand) => (
+            <Chip key={brand.id} className="flex-shrink-0">
+              {brand.name}
+            </Chip>
           ))}
         </div>
       </div>

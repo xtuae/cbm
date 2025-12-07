@@ -1,94 +1,24 @@
-import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useCart } from '../contexts/CartContext';
 import Breadcrumb from '../components/Breadcrumb';
 import { OrderSummaryCard, CartItemRow } from '../components/ui';
 
-interface CartItem {
-  id: string;
-  credit_pack_id: string;
-  name: string;
-  credits: number;
-  price: number;
-  quantity: number;
-  processing_fee?: number;
-}
-
 const Cart = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState(false);
   const { user } = useAuth();
+  const { items: cartItems, updateQuantity, removeItem } = useCart();
   const navigate = useNavigate();
-
-  // Load cart items from localStorage on component mount
-  useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      try {
-        setCartItems(JSON.parse(savedCart));
-      } catch (error) {
-        console.error('Error loading cart:', error);
-        localStorage.removeItem('cart');
-      }
-    }
-  }, []);
-
-  // Save cart items to localStorage whenever cartItems change
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cartItems));
-  }, [cartItems]);
-
-  const updateQuantity = (itemId: string, newQuantity: number) => {
-    if (newQuantity < 1) {
-      removeItem(itemId);
-      return;
-    }
-
-    setCartItems(items =>
-      items.map(item =>
-        item.id === itemId
-          ? { ...item, quantity: Math.min(newQuantity, 99) }
-          : item
-      )
-    );
-  };
-
-  const removeItem = (itemId: string) => {
-    setCartItems(items => items.filter(item => item.id !== itemId));
-  };
-
-  const incrementQuantity = (itemId: string) => {
-    setCartItems(items =>
-      items.map(item =>
-        item.id === itemId
-          ? { ...item, quantity: Math.min(item.quantity + 1, 99) }
-          : item
-      )
-    );
-  };
-
-  const decrementQuantity = (itemId: string) => {
-    setCartItems(items =>
-      items.map(item => {
-        if (item.id === itemId) {
-          const newQuantity = item.quantity - 1;
-          if (newQuantity < 1) {
-            return null; // Will be filtered out
-          }
-          return { ...item, quantity: newQuantity };
-        }
-        return item;
-      }).filter(Boolean) as CartItem[]
-    );
-  };
 
   const calculateSubtotal = () => {
     return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
+  const calculateTotalCredits = () => {
+    return cartItems.reduce((total, item) => total + (item.credits * item.quantity), 0);
+  };
+
   const calculateProcessingFee = () => {
-    // Fixed processing fee of $0.99 per item (configurable)
-    const subtotal = calculateSubtotal();
+    // Fixed processing fee of $0.99 per item
     const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
     return itemCount * 0.99;
   };
@@ -110,22 +40,8 @@ const Cart = () => {
       return;
     }
 
-    // Navigate to checkout page - checkout logic moved there
+    // Navigate to checkout page
     navigate('/checkout');
-  };
-
-  const addToCart = (creditPack: any, quantity: number = 1) => {
-    const cartItem: CartItem = {
-      id: `${creditPack.id}_${Date.now()}`, // Unique ID for cart item
-      credit_pack_id: creditPack.id,
-      name: creditPack.name,
-      credits: creditPack.credit_amount,
-      price: creditPack.price_usd,
-      quantity: quantity,
-      processing_fee: 0.99, // $0.99 per item
-    };
-
-    setCartItems(prev => [...prev, cartItem]);
   };
 
   if (cartItems.length === 0) {
@@ -172,6 +88,7 @@ const Cart = () => {
                     <th className="text-center py-4 px-2 text-sm font-medium text-gray-600">Credits</th>
                     <th className="text-center py-4 px-2 text-sm font-medium text-gray-600">Price</th>
                     <th className="text-center py-4 px-2 text-sm font-medium text-gray-600">Quantity</th>
+                    <th className="text-center py-4 px-2 text-sm font-medium text-gray-600">Total</th>
                     <th className="text-center py-4 px-2 text-sm font-medium text-gray-600">Remove</th>
                   </tr>
                 </thead>
@@ -202,10 +119,10 @@ const Cart = () => {
           <div className="lg:col-span-1">
             <OrderSummaryCard
               subtotal={calculateSubtotal()}
+              totalCredits={calculateTotalCredits()}
               processingFee={calculateProcessingFee()}
               total={calculateTotal()}
               onProceed={handleCheckout}
-              loading={loading}
               buttonText="Continue to Checkout"
             />
           </div>

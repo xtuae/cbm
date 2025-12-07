@@ -35,6 +35,9 @@ const CartItemRow = ({ item, onUpdateQuantity, onRemove }: CartItemRowProps) => 
         <span className="text-sm font-medium text-gray-900">${item.price.toFixed(2)}</span>
       </td>
       <td className="text-center py-6 px-2">
+        <span className="text-sm font-medium text-gray-900">${(item.price * item.quantity).toFixed(2)}</span>
+      </td>
+      <td className="text-center py-6 px-2">
         <div className="flex items-center justify-center gap-2">
           <button
             onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}

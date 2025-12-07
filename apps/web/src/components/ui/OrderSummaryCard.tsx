@@ -2,7 +2,8 @@ import { Button, Card } from './index';
 
 interface OrderSummaryCardProps {
   subtotal: number;
-  processingFee: number;
+  totalCredits?: number;
+  processingFee?: number;
   total: number;
   onProceed: () => void;
   loading?: boolean;
@@ -12,6 +13,7 @@ interface OrderSummaryCardProps {
 
 const OrderSummaryCard = ({
   subtotal,
+  totalCredits,
   processingFee,
   total,
   onProceed,
@@ -29,10 +31,19 @@ const OrderSummaryCard = ({
           <span className="font-medium">${subtotal.toFixed(2)}</span>
         </div>
 
-        <div className="flex justify-between text-gray-600">
-          <span>Processing Fee</span>
-          <span className="font-medium">${processingFee.toFixed(2)}</span>
-        </div>
+        {totalCredits && (
+          <div className="flex justify-between text-gray-600">
+            <span>Total Credits</span>
+            <span className="font-medium">{totalCredits.toLocaleString()} credits</span>
+          </div>
+        )}
+
+        {processingFee && processingFee > 0 && (
+          <div className="flex justify-between text-gray-600">
+            <span>Processing Fee</span>
+            <span className="font-medium">${processingFee.toFixed(2)}</span>
+          </div>
+        )}
 
         <hr className="border-light" />
 
@@ -41,9 +52,11 @@ const OrderSummaryCard = ({
           <span>${total.toFixed(2)}</span>
         </div>
 
-        <p className="text-xs text-gray-500 leading-relaxed">
-          Processing fee covers secure payment handling and instant digital delivery
-        </p>
+        {processingFee && processingFee > 0 && (
+          <p className="text-xs text-gray-500 leading-relaxed">
+            Processing fee covers secure payment handling and instant digital delivery
+          </p>
+        )}
       </div>
 
       {showTerms && (

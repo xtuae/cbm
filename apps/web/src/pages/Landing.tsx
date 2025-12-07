@@ -1,9 +1,6 @@
 import HeroCredit from '../components/landing/HeroCredit';
-import TopBrandsStrip from '../components/landing/TopBrandsStrip';
 import CategoriesGrid from '../components/landing/CategoriesGrid';
-import HowItWorks from '../components/landing/HowItWorks';
 import TopPacksGrid from '../components/landing/TopPacksGrid';
-import PopularBundlesList from '../components/landing/PopularBundlesList';
 
 const Landing = () => {
   return (
@@ -15,15 +12,9 @@ const Landing = () => {
         </div>
       </section>
 
-      <TopBrandsStrip />
-
       <CategoriesGrid />
 
-      <HowItWorks />
-
       <TopPacksGrid />
-
-      <PopularBundlesList />
     </>
   );
 };

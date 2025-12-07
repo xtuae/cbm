@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
-import { Card, Badge } from '../ui';
+import { Card, Badge, Button } from '../ui';
+import { useCart } from '../../contexts/CartContext';
 
 interface PackCardProps {
   pack: {
     id: string;
     name: string;
+    description?: string;
     credit_amount: number;
     price_usd: number;
     categories?: Array<{ name: string }>;
@@ -13,6 +15,7 @@ interface PackCardProps {
 }
 
 const PackCard = ({ pack }: PackCardProps) => {
+  const { addItem } = useCart();
   // Check if pack is popular (placeholder logic)
   const isPopular = Math.random() > 0.7;
   const isNew = Math.random() > 0.8;
@@ -56,6 +59,13 @@ const PackCard = ({ pack }: PackCardProps) => {
           {pack.name}
         </h3>
 
+        {/* Description */}
+        {pack.description && (
+          <p className="text-sm text-gray-400 line-clamp-2">
+            {pack.description}
+          </p>
+        )}
+
         {/* Credits Amount */}
         <p className="text-indigo-400 font-semibold">
           {pack.credit_amount.toLocaleString()} Digital Credits
@@ -66,13 +76,18 @@ const PackCard = ({ pack }: PackCardProps) => {
           ${pack.price_usd.toFixed(2)}
         </p>
 
-        {/* CTA Button */}
-        <Link
-          to={`/marketplace/${pack.id}`}
-          className="btn-primary w-full text-center"
-        >
-          View Pack
-        </Link>
+        {/* CTA Buttons */}
+        <div className="space-y-2">
+          <Button onClick={() => { addItem({ credit_pack_id: pack.id, name: pack.name, credits: pack.credit_amount, price: pack.price_usd }); alert('Added to cart!'); }} className="w-full">
+            Add to Cart
+          </Button>
+          <Link
+            to={`/marketplace/${pack.id}`}
+            className="btn-secondary w-full inline-flex justify-center"
+          >
+            View Pack
+          </Link>
+        </div>
       </div>
     </Card>
   );

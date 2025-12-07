@@ -8,6 +8,8 @@ interface ProductTabsProps {
 }
 
 const ProductTabs = ({ description, longDescription, creditAmount }: ProductTabsProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const { description } = props; // used in logic below
   const [activeTab, setActiveTab] = useState('details');
 
   const tabs = [

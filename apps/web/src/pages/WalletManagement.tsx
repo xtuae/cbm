@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { useUserCredits } from '../hooks/useUserCredits';
 
 interface WalletAddress {
   id: string;
@@ -14,6 +15,7 @@ interface WalletAddress {
 
 const WalletManagement = () => {
   const { user } = useAuth();
+  const { balance, stats } = useUserCredits(1, 1); // Get current balance
   const [wallets, setWallets] = useState<WalletAddress[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -170,6 +172,19 @@ const WalletManagement = () => {
           </svg>
           Add Wallet
         </button>
+      </div>
+
+      {/* Credit Balance Summary */}
+      <div className="card mb-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-medium text-gray-900">Credit Balance</h3>
+            <p className="text-3xl font-bold text-gray-900">{balance.toLocaleString()}</p>
+          </div>
+          <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center">
+            <span className="text-primary font-semibold text-xl">C</span>
+          </div>
+        </div>
       </div>
 
       {error && (

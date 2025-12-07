@@ -1,45 +1,30 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useCart } from '../contexts/CartContext';
 import logo from '../assets/cbm-logo.webp';
 
 const Header = () => {
   const { user, signOut } = useAuth();
+  const { items: cartItems, getTotalItems } = useCart();
   const location = useLocation();
-  const [cartItemCount, setCartItemCount] = useState(0);
+  const navigate = useNavigate();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [cartDropdownOpen, setCartDropdownOpen] = useState(false);
 
-  // Update cart count from localStorage
-  useEffect(() => {
-    const updateCartCount = () => {
-      const cart = localStorage.getItem('cart');
-      if (cart) {
-        try {
-          const cartItems = JSON.parse(cart);
-          const count = cartItems.reduce((total: number, item: any) => total + item.quantity, 0);
-          setCartItemCount(count);
-        } catch (error) {
-          setCartItemCount(0);
-        }
-      } else {
-        setCartItemCount(0);
-      }
-    };
+  const cartItemCount = getTotalItems();
+  const totalCredits = cartItems.reduce((sum, item) => sum + (item.credits * item.quantity), 0);
+  const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-    updateCartCount();
-    // Listen for storage changes
-    const handleStorageChange = () => updateCartCount();
-    window.addEventListener('storage', handleStorageChange);
-
-    // Also listen for cart updates (custom events we might add later)
-    const handleCartUpdate = () => updateCartCount();
-    window.addEventListener('cartUpdate', handleCartUpdate);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('cartUpdate', handleCartUpdate);
-    };
-  }, []);
+  const handleCheckout = () => {
+    if (!user) {
+      localStorage.setItem('redirectAfterLogin', '/checkout');
+      navigate('/login');
+      return;
+    }
+    navigate('/checkout');
+    setCartDropdownOpen(false);
+  };
 
   const handleSignOut = async () => {
     try {
@@ -110,20 +95,101 @@ const Header = () => {
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
-            {/* Cart Icon with Badge */}
-            <Link
-              to="/cart"
-              className="relative text-gray-300 hover:text-indigo-400 transition-colors p-2"
-            >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5H6M7 13l1.1-5m1.4 0H17m-9.5-1H3" />
-              </svg>
-              {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-xs font-medium rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartItemCount > 99 ? '99+' : cartItemCount}
-                </span>
+            {/* Cart Icon with Badge and Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setCartDropdownOpen(!cartDropdownOpen)}
+                className="relative text-gray-300 hover:text-indigo-400 transition-colors p-2"
+              >
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5H6M7 13l1.1-5m1.4 0H17m-9.5-1H3" />
+                </svg>
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-xs font-medium rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartItemCount > 99 ? '99+' : cartItemCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Cart Dropdown */}
+              {cartDropdownOpen && (
+                <>
+                  {/* Backdrop */}
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setCartDropdownOpen(false)}
+                  ></div>
+
+                  {/* Dropdown */}
+                  <div className="absolute right-0 mt-2 w-80 bg-black/90 backdrop-blur-md rounded-lg shadow-2xl border border-white/10 z-50 max-h-96 overflow-y-auto">
+                    <div className="p-4">
+                      {/* Cart Items */}
+                      {cartItems.length === 0 ? (
+                        <p className="text-gray-400 text-sm text-center py-4">Your cart is empty</p>
+                      ) : (
+                        <>
+                          <h3 className="text-white text-sm font-medium mb-3">Cart Summary</h3>
+
+                          {/* Summary Stats */}
+                          <div className="space-y-2 mb-4">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-400">Total Packs:</span>
+                              <span className="text-white">{cartItemCount}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-400">Total Credits:</span>
+                              <span className="text-white">{totalCredits.toLocaleString()}</span>
+                            </div>
+                            <div className="flex justify-between text-sm font-medium">
+                              <span className="text-gray-300">Total Amount:</span>
+                              <span className="text-white">${totalAmount.toFixed(2)}</span>
+                            </div>
+                          </div>
+
+                          {/* Cart Items List */}
+                          <div className="space-y-2 mb-4 max-h-32 overflow-y-auto">
+                            {cartItems.slice(0, 3).map((item) => (
+                              <div key={item.id} className="flex justify-between text-sm">
+                                <div className="text-gray-300 truncate">
+                                  {item.name} x{item.quantity}
+                                </div>
+                                <span className="text-white ml-2">
+                                  ${(item.price * item.quantity).toFixed(2)}
+                                </span>
+                              </div>
+                            ))}
+                            {cartItems.length > 3 && (
+                              <p className="text-gray-400 text-xs text-center">
+                                ... and {cartItems.length - 3} more items
+                              </p>
+                            )}
+                          </div>
+
+                          {/* Buttons */}
+                          <div className="space-y-2">
+                            <button
+                              onClick={handleCheckout}
+                              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 text-sm font-medium rounded-md transition-colors"
+                            >
+                              Checkout
+                            </button>
+                            <button
+                              onClick={() => {
+                                navigate('/cart');
+                                setCartDropdownOpen(false);
+                              }}
+                              className="w-full text-gray-300 hover:text-white py-2 px-4 text-sm font-medium rounded-md border border-white/20 hover:border-white/40 transition-colors"
+                            >
+                              View Full Cart
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </>
               )}
-            </Link>
+            </div>
 
             {user ? (
               /* User Avatar with Dropdown - Logged In */

@@ -12,11 +12,10 @@ interface PackInfoPanelProps {
     is_featured?: boolean;
   };
   onAddToCart: (quantity: number) => void;
-  onBuyNow: (quantity: number) => void;
   loading?: boolean;
 }
 
-const PackInfoPanel = ({ pack, onAddToCart, onBuyNow, loading = false }: PackInfoPanelProps) => {
+const PackInfoPanel = ({ pack, onAddToCart, loading = false }: PackInfoPanelProps) => {
   const [quantity, setQuantity] = useState(1);
 
   const handleQuantityChange = (delta: number) => {
@@ -30,9 +29,7 @@ const PackInfoPanel = ({ pack, onAddToCart, onBuyNow, loading = false }: PackInf
     onAddToCart(quantity);
   };
 
-  const handleBuyNow = () => {
-    onBuyNow(quantity);
-  };
+
 
   // Placeholder logic for badges
   const isNew = Math.random() > 0.8;
@@ -106,20 +103,17 @@ const PackInfoPanel = ({ pack, onAddToCart, onBuyNow, loading = false }: PackInf
       <div className="flex gap-4 pt-4">
         <Button
           onClick={handleAddToCart}
-          variant="secondary"
           className="flex-1"
           disabled={loading}
         >
           Add to Cart
         </Button>
-        <Button
-          onClick={handleBuyNow}
-          variant="primary"
-          className="flex-1"
-          disabled={loading}
+        <a
+          href="/marketplace"
+          className="flex-1 bg-transparent border border-gray-600 text-gray-300 hover:border-gray-400 hover:text-white transition-colors rounded-lg px-6 py-3 text-center text-sm font-medium"
         >
-          {loading ? 'Processing...' : 'Buy Now'}
-        </Button>
+          Back to Marketplace
+        </a>
       </div>
 
       {/* Features List */}

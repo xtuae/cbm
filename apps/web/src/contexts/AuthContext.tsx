@@ -41,54 +41,42 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let loadingTimeout: number;
+    // For development: Immediately set a mock authenticated user
+    // This matches the backend mock authentication
+    const mockUser = {
+      id: '123e4567-e89b-12d3-a456-426614174000',
+      email: 'test@example.com',
+      app_metadata: {},
+      user_metadata: { full_name: 'Test User' },
+      aud: 'authenticated',
+      created_at: new Date().toISOString(),
+    } as User;
 
-    // Safety timeout - always stop loading after 10 seconds max
-    loadingTimeout = setTimeout(() => {
-      console.warn('AuthProvider: Loading timeout reached - forcing completion');
-      setLoading(false);
-    }, 10000);
-
-    // Get initial session
-    const getInitialSession = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        console.log('AuthProvider: Initial session check:', !!session);
-        setUser(session?.user ?? null);
-        if (session?.user) {
-          await fetchProfile(session.user.id);
-        }
-        setLoading(false);
-        clearTimeout(loadingTimeout);
-      } catch (error) {
-        console.error('AuthProvider: Session check failed:', error);
-        setUser(null);
-        setProfile(null);
-        setLoading(false);
-        clearTimeout(loadingTimeout);
-      }
+    const mockProfile = {
+      id: '123e4567-e89b-12d3-a456-426614174000',
+      email: 'test@example.com',
+      role: 'user',
+      credit_balance: 1000,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
-    getInitialSession();
+    setUser(mockUser);
+    setProfile(mockProfile);
+    setLoading(false);
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log('AuthProvider: Auth state changed:', event, !!session);
-        setUser(session?.user ?? null);
-        if (session?.user) {
-          await fetchProfile(session.user.id);
-        } else {
-          setProfile(null);
-        }
-        setLoading(false);
-        clearTimeout(loadingTimeout);
-      }
-    );
+    console.log('AuthProvider: Development mock user authenticated');
+
+    // Optional: Still listen for real auth changes for when Supabase auth is set up
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      console.log('AuthProvider: Auth state changed:', _event, !!session);
+      // For now, ignore real auth changes and keep mock user
+    });
 
     return () => {
       subscription.unsubscribe();
-      clearTimeout(loadingTimeout);
     };
   }, []);
 

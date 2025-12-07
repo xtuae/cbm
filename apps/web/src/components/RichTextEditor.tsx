@@ -19,7 +19,7 @@ const RichTextEditor = ({
   className = ""
 }: RichTextEditorProps) => {
   const [markdownValue, setMarkdownValue] = useState<string>(value || '');
-  const [isPreview, setIsPreview] = useState<boolean>(false);
+  // const [isPreview, setIsPreview] = useState<boolean>(false);
 
   // Sync external value changes to internal state
   useEffect(() => {

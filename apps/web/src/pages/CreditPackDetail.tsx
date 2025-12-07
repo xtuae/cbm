@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { useCart } from '../contexts/CartContext';
 import Breadcrumb from '../components/Breadcrumb';
 import { ProductDetailSkeleton } from '../components/Skeletons';
 import { Card } from '../components/ui';
@@ -38,19 +39,20 @@ interface CreditPack {
 }
 
 const CreditPackDetail = () => {
-  const { id } = useParams<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>();
   const [creditPack, setCreditPack] = useState<CreditPack | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const { user } = useAuth();
+  const { addItem } = useCart();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (id) {
+    if (slug) {
       fetchCreditPack();
     }
-  }, [id]);
+  }, [slug]);
 
   // Update page title and meta tags with SEO data
   useEffect(() => {
@@ -80,14 +82,21 @@ const CreditPackDetail = () => {
 
   const fetchCreditPack = async () => {
     try {
-      const response = await fetch(`/api/v1/credit-packs`);
-      if (response.ok) {
-        const data = await response.json();
-        const pack = data.find((p: CreditPack) => p.id === id);
-        setCreditPack(pack || null);
+      const { data, error } = await supabase
+        .from('credit_packs')
+        .select('*')
+        .eq('id', slug!)
+        .single();
+
+      if (error) {
+        console.error('Error fetching credit pack:', error);
+        setCreditPack(null);
+      } else {
+        setCreditPack(data);
       }
     } catch (error) {
       console.error('Error fetching credit pack:', error);
+      setCreditPack(null);
     } finally {
       setLoading(false);
     }
@@ -99,33 +108,17 @@ const CreditPackDetail = () => {
     }
   };
 
-  const addToCart = (item: any, qty: number = quantity) => {
-    // Get current cart from localStorage
-    const currentCart = JSON.parse(localStorage.getItem('cart') || '[]');
-
-    const cartItem = {
-      id: `${item.id}_${Date.now()}`, // Unique ID for cart item
-      credit_pack_id: item.id,
-      name: item.name,
-      credits: item.credit_amount,
-      price: item.price_usd,
-      quantity: qty,
-      processing_fee: 0.99,
-    };
-
-    // Add item to cart
-    currentCart.push(cartItem);
-
-    // Save back to localStorage
-    localStorage.setItem('cart', JSON.stringify(currentCart));
-  };
-
   const handlePurchase = async (method: 'buy' | 'cart', qty: number = quantity) => {
     if (!creditPack) return;
 
     if (method === 'cart') {
       // Add to Cart - no auth required
-      addToCart(creditPack, quantity);
+      addItem({
+        credit_pack_id: creditPack.id,
+        name: creditPack.name,
+        credits: creditPack.credit_amount,
+        price: creditPack.price_usd,
+      }, qty);
       alert(`Added ${quantity} x ${creditPack.name} to cart!`);
       return;
     }
@@ -294,7 +287,6 @@ const CreditPackDetail = () => {
             <PackInfoPanel
               pack={creditPack}
               onAddToCart={(qty) => handlePurchase('cart', qty)}
-              onBuyNow={(qty) => handlePurchase('buy', qty)}
               loading={processingId === creditPack.id}
             />
           </div>

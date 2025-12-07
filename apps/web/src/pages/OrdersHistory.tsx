@@ -61,33 +61,72 @@ const OrdersHistory = () => {
         return;
       }
 
-      const { data, error } = await supabase
+      // First get orders
+      const { data: ordersData, error: ordersError } = await supabase
         .from('orders')
         .select(`
-          *,
-          credit_packs (
-            id, name, description, credit_amount, price_usd
-          )
+          id,
+          user_id,
+          status,
+          payment_status,
+          amount,
+          total_credits,
+          payment_provider,
+          provider_reference,
+          created_at,
+          updated_at
         `)
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
-      if (error) {
-        throw new Error(error.message);
+      if (ordersError) {
+        throw new Error(ordersError.message);
       }
+
+      // Get order items separately
+      const orderIds = (ordersData || []).map(order => order.id);
+      let orderItems: any[] = [];
+      if (orderIds.length > 0) {
+        const { data: itemsData, error: itemsError } = await supabase
+          .from('order_items')
+          .select(`
+            id,
+            order_id,
+            quantity,
+            unit_price,
+            credit_packs (
+              id,
+              name,
+              credit_amount,
+              price_usd
+            )
+          `)
+          .in('order_id', orderIds);
+
+        if (itemsError) {
+          console.error('Error fetching order items:', itemsError);
+          // Continue without items data
+        } else {
+          orderItems = itemsData || [];
+        }
+      }
+
+      // Merge orders with their items
+      const data = (ordersData || []).map(order => ({
+        ...order,
+        order_items: orderItems.filter((item: any) => item.order_id === order.id)
+      }));
 
       // Transform the data to match the expected format
       const transformedOrders = (data || []).map(order => ({
         ...order,
-        // For backward compatibility - single item orders
-        credit_pack_id: order.credit_pack_id,
-        credit_packs: order.credit_packs,
         // Map database fields to expected format
         total_amount: order.amount,
-        payment_gateway: 'stripe', // Default since not in schema
+        payment_gateway: order.payment_provider || 'unknown',
+        status: order.payment_status || 'pending', // Use payment_status for display
       }));
 
-      setOrders(transformedOrders);
+      setOrders(transformedOrders as any);
     } catch (err) {
       console.error('Error fetching orders:', err);
       setError('Failed to load orders');

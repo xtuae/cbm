@@ -2,45 +2,50 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { useCart } from '../contexts/CartContext';
 import Breadcrumb from '../components/Breadcrumb';
 import { OrderSummaryCard } from '../components/ui';
 
-interface CartItem {
-  id: string;
-  credit_pack_id: string;
-  name: string;
-  credits: number;
-  price: number;
-  quantity: number;
-  processing_fee?: number;
-}
+
 
 const Checkout = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [paymentProvider, setPaymentProvider] = useState<any>(null);
+  const [availableProviders, setAvailableProviders] = useState<any[]>([]);
   const { user } = useAuth();
+  const { items: cartItems, getTotalItems, clearCart } = useCart();
   const navigate = useNavigate();
 
-  // Load cart items from localStorage on component mount
+  // Fetch payment providers
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
+    const fetchPaymentProviders = async () => {
       try {
-        const parsedCart = JSON.parse(savedCart);
-        if (!parsedCart.length) {
-          navigate('/cart');
-          return;
+        const { data, error } = await supabase
+          .from('payment_providers')
+          .select('*')
+          .eq('is_enabled', true)
+          .order('is_default_test', { ascending: false });
+
+        if (!error && data && data.length > 0) {
+          setAvailableProviders(data);
+          // Set the default provider (first one with is_default_test = true, or first in list)
+          const defaultProvider = data.find(p => p.is_default_test) || data[0];
+          setPaymentProvider(defaultProvider);
         }
-        setCartItems(parsedCart);
       } catch (error) {
-        console.error('Error loading cart:', error);
-        localStorage.removeItem('cart');
-        navigate('/cart');
+        console.error('Error fetching payment providers:', error);
       }
-    } else {
-      navigate('/cart');
+    };
+    fetchPaymentProviders();
+  }, []);
+
+  // Check cart on mount
+  useEffect(() => {
+    if (getTotalItems() === 0) {
+      navigate('/marketplace');
+      return;
     }
-  }, [navigate]);
+  }, [getTotalItems, navigate]);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -64,44 +69,70 @@ const Checkout = () => {
     return calculateSubtotal() + calculateProcessingFee();
   };
 
-  const handleProceedToPayment = async () => {
+  const handleConfirmAndPay = async () => {
     if (!user) {
       localStorage.setItem('redirectAfterLogin', '/checkout');
       navigate('/login');
       return;
     }
 
+    if (cartItems.length === 0) {
+      alert('Cart is empty');
+      return;
+    }
+
     try {
       setLoading(true);
 
-      // For now, assuming single item orders as in marketplace
-      // Later you can extend to support multiple items
-      const firstItem = cartItems[0];
-      if (!firstItem) {
-        throw new Error('No items in cart');
-      }
+      // Prepare payload for backend
+      const payload = {
+        provider: paymentProvider.provider,
+        items: cartItems.map(item => ({
+          packId: item.credit_pack_id, // UUID string
+          quantity: item.quantity,
+        })),
+      };
 
-      // Use RPC function for order creation with business logic
-      const { data, error } = await supabase.rpc('create_order', {
-        p_credit_pack_id: firstItem.credit_pack_id,
-        p_quantity: firstItem.quantity,
-        p_total_amount: calculateTotal()
+      console.log('Order creation payload:', payload);
+
+      // Call backend API to create order
+      const { data: { session } } = await supabase.auth.getSession();
+      const response = await fetch('/api/v1/payments/create-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token || ''}`,
+        },
+        body: JSON.stringify(payload),
       });
 
-      if (error) {
-        throw new Error(error.message);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      if (!data?.order_id) {
-        throw new Error('Order creation failed - no order ID returned');
-      }
+      const orderData = await response.json();
 
-      // Navigate to payment page with order ID
-      navigate(`/payment/${data.order_id}`);
+      console.log('Order created:', orderData);
+
+      // Clear cart on successful order creation
+      clearCart && clearCart();
+
+      // Handle payment flow based on response
+      if (orderData.status === 'paid') {
+        // TEST payment: already processed, show success with credits message
+        navigate('/orders/success?orderId=' + orderData.orderId);
+      } else if (orderData.status === 'redirect') {
+        // 3THIX payment: redirect to payment widget
+        window.location.href = orderData.paymentUrl;
+      } else {
+        // Fallback
+        navigate('/orders/success?orderId=' + orderData.orderId);
+      }
 
     } catch (error) {
       console.error('Error creating order:', error);
       alert('Failed to create order. Please try again.');
+      navigate('/checkout/failed');
     } finally {
       setLoading(false);
     }
@@ -182,15 +213,47 @@ const Checkout = () => {
 
           {/* Right: Order summary */}
           <div className="space-y-6">
+            {/* Payment Provider Selection */}
+            {availableProviders.length > 0 && (
+              <div className="card">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Payment Method</h3>
+                <div className="space-y-3">
+                  {availableProviders.map((provider) => (
+                    <label key={provider.id} className="flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name="paymentProvider"
+                        value={provider.id}
+                        checked={paymentProvider?.id === provider.id}
+                        onChange={() => setPaymentProvider(provider)}
+                        className="h-4 w-4 text-primary focus:ring-primary border-gray-300"
+                      />
+                      <span className="ml-3">
+                        <span className="text-gray-900 font-medium">{provider.name}</span>
+                        <span className="ml-2 text-sm text-gray-600">
+                          ({provider.provider === 'TEST' ? 'Test Gateway' : '3THIX Payment Gateway'})
+                        </span>
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <OrderSummaryCard
               subtotal={calculateSubtotal()}
               processingFee={calculateProcessingFee()}
               total={calculateTotal()}
-              onProceed={handleProceedToPayment}
+              onProceed={handleConfirmAndPay}
               loading={loading}
-              buttonText="Pay Now"
+              buttonText="Confirm and Pay"
               showTerms={true}
             />
+
+            {/* Legal text */}
+            <div className="text-sm text-gray-600 text-center">
+              By completing payment you are purchasing digital credits for use inside the platform. This is not the purchase of cryptocurrency or tokens. All blockchain-related reward transfers are executed manually by the admin team.
+            </div>
           </div>
         </div>
       </div>

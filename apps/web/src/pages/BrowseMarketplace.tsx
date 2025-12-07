@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import FiltersBar from '../components/marketplace/FiltersBar';
 import ProductGrid from '../components/marketplace/ProductGrid';
+import { Button } from '../components/ui';
 
 interface Category {
   id: string;
@@ -51,6 +52,7 @@ const BrowseMarketplace = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState('recommended');
+  const [visiblePacks, setVisiblePacks] = useState(12); // Show 12 initially
 
   // Fetch categories and credit packs with fallback to placeholder data
   const fetchCategories = useCallback(async () => {
@@ -76,13 +78,7 @@ const BrowseMarketplace = () => {
     try {
       const { data, error } = await supabase
         .from('credit_packs')
-        .select(`
-          *,
-          categories:credit_pack_categories!inner(
-            categories!inner(*)
-          )
-        `)
-        .eq('is_active', true)
+        .select('*')
         .limit(50);
 
       if (error || !data || data.length === 0) {
@@ -133,7 +129,44 @@ const BrowseMarketplace = () => {
       console.error('Error fetching credit packs:', error);
       setCreditPacks(placeholderPacks);
     }
-  }, [selectedCategory, searchTerm, sortBy]);
+    }, [selectedCategory, searchTerm, sortBy]);
+
+  // Client-side filtering and sorting
+  const getFilteredPacks = useCallback(() => {
+    let filteredPacks = [...creditPacks];
+
+    // Apply category filter
+    if (selectedCategory && selectedCategory !== 'all') {
+      filteredPacks = filteredPacks.filter(pack =>
+        pack.categories?.some(cat => cat.id === selectedCategory)
+      );
+    }
+
+    // Apply search filter
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      filteredPacks = filteredPacks.filter(pack =>
+        pack.name.toLowerCase().includes(term) ||
+        pack.description?.toLowerCase().includes(term)
+      );
+    }
+
+    // Apply sorting
+    filteredPacks.sort((a, b) => {
+      switch (sortBy) {
+        case 'price_asc':
+          return a.price_usd - b.price_usd;
+        case 'price_desc':
+          return b.price_usd - a.price_usd;
+        case 'newest':
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        default:
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }
+    });
+
+    return filteredPacks;
+  }, [creditPacks, selectedCategory, searchTerm, sortBy]);
 
   useEffect(() => {
     const initializeData = async () => {
@@ -146,7 +179,14 @@ const BrowseMarketplace = () => {
 
   useEffect(() => {
     fetchCreditPacks();
-  }, [fetchCreditPacks, selectedCategory, sortBy, searchTerm]);
+    // Reset pagination when filters change
+    setVisiblePacks(12);
+  }, [fetchCreditPacks, selectedCategory, sortBy]);
+
+  // Reset pagination when search changes
+  useEffect(() => {
+    setVisiblePacks(12);
+  }, [searchTerm]);
 
   const handleCategoryChange = (categoryId: string | null) => {
     setSelectedCategory(categoryId);
@@ -165,6 +205,10 @@ const BrowseMarketplace = () => {
     setSelectedCategory(null);
     setSortBy('recommended');
   };
+
+  const filteredPacks = getFilteredPacks();
+  const displayedPacks = filteredPacks.slice(0, visiblePacks);
+  const hasMore = filteredPacks.length > visiblePacks;
 
   return (
     <>
@@ -194,9 +238,23 @@ const BrowseMarketplace = () => {
           />
 
           <ProductGrid
-            packs={creditPacks}
+            packs={displayedPacks}
             loading={loading}
           />
+
+          {/* Load More Button */}
+          {hasMore && (
+            <div className="text-center mt-8">
+              <Button onClick={() => setVisiblePacks(prev => prev + 12)}>
+                Load More Credit Packs
+              </Button>
+            </div>
+          )}
+
+          {/* Results Count */}
+          <div className="text-center mt-4 text-sm text-gray-400">
+            Showing {displayedPacks.length} of {filteredPacks.length} credit packs
+          </div>
         </div>
       </section>
     </>

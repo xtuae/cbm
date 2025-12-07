@@ -9,6 +9,12 @@ import CreditPackDetail from './pages/CreditPackDetail';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Payment from './pages/Payment';
+import CheckoutConfirm from './pages/CheckoutConfirm';
+import CheckoutSuccess from './pages/CheckoutSuccess';
+import CheckoutFailed from './pages/CheckoutFailed';
+import CheckoutCancel from './pages/CheckoutCancel';
+import OrderSuccess from './pages/OrderSuccess';
+import OrderFailed from './pages/OrderFailed';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Terms from './pages/Terms';
@@ -62,10 +68,64 @@ function AppContent() {
         />
 
         <Route
+          path="checkout/confirm"
+          element={
+            <RequireAuth>
+              <CheckoutConfirm />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="checkout/success"
+          element={
+            <RequireAuth>
+              <CheckoutSuccess />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="checkout/failed"
+          element={
+            <RequireAuth>
+              <CheckoutFailed />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="checkout/cancel"
+          element={
+            <RequireAuth>
+              <CheckoutCancel />
+            </RequireAuth>
+          }
+        />
+
+        <Route
           path="payment/:orderId"
           element={
             <RequireAuth>
               <Payment />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="orders/success"
+          element={
+            <RequireAuth>
+              <OrderSuccess />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="orders/failed"
+          element={
+            <RequireAuth>
+              <OrderFailed />
             </RequireAuth>
           }
         />

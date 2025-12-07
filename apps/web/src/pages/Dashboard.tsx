@@ -2,19 +2,16 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import WishlistButton from '../components/WishlistButton';
 import { EmptyWishlist } from '../components/EmptyState';
-
-interface CreditSummary {
-  credit_balance: number;
-  total_purchased: number;
-  total_converted: number;
-}
+import { useUserCredits } from '../hooks/useUserCredits';
 
 interface RecentLedgerEntry {
-  id: string;
-  transaction_type: string;
-  amount: number;
-  description: string | null;
+  id: number;
+  change: number;
+  type: string;
+  balance_after: number;
   created_at: string;
+  reference_table: string | null;
+  reference_id: number | null;
 }
 
 interface WishlistItem {
@@ -31,15 +28,10 @@ interface WishlistItem {
 }
 
 const Dashboard = () => {
-  const [creditSummary, setCreditSummary] = useState<CreditSummary | null>(null);
-  const [recentActivity, setRecentActivity] = useState<RecentLedgerEntry[]>([]);
+  const { balance, stats, ledger, loading, error } = useUserCredits(1, 5);
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchCreditSummary();
-    fetchRecentActivity();
     fetchWishlist();
   }, []);
 
@@ -64,64 +56,14 @@ const Dashboard = () => {
     }
   };
 
-  const fetchCreditSummary = async () => {
-    try {
-      const token = localStorage.getItem('access_token');
-      if (!token) {
-        setError('Authentication required');
-        return;
-      }
-
-      const response = await fetch('http://localhost:3000/api/v1/credits', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setCreditSummary(data);
-    } catch (err) {
-      console.error('Error fetching credit summary:', err);
-      setError('Failed to load credit summary');
-    }
-  };
-
-  const fetchRecentActivity = async () => {
-    try {
-      const token = localStorage.getItem('access_token');
-      if (!token) return;
-
-      const response = await fetch('http://localhost:3000/api/v1/credits/ledger?page=1&limit=5', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setRecentActivity(data.data || []);
-      }
-    } catch (err) {
-      console.error('Error fetching recent activity:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const formatTransactionType = (type: string) => {
     switch (type) {
-      case 'credit_purchase':
+      case 'purchase':
         return 'Credit Purchase';
-      case 'settlement_used':
+      case 'settlement':
         return 'Settlement';
-      case 'reward':
-        return 'Reward';
+      case 'usage':
+        return 'Usage';
       default:
         return type;
     }
@@ -129,12 +71,12 @@ const Dashboard = () => {
 
   const getActivityIconColor = (type: string) => {
     switch (type) {
-      case 'credit_purchase':
+      case 'purchase':
         return 'bg-blue-500';
-      case 'settlement_used':
+      case 'settlement':
         return 'bg-green-500';
-      case 'reward':
-        return 'bg-purple-500';
+      case 'usage':
+        return 'bg-red-500';
       default:
         return 'bg-gray-500';
     }
@@ -188,7 +130,7 @@ const Dashboard = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Credit Balance</p>
               <p className="text-2xl font-bold text-gray-900">
-                {creditSummary ? creditSummary.credit_balance.toLocaleString() : '0'}
+                {balance.toLocaleString()}
               </p>
             </div>
           </div>
@@ -202,7 +144,7 @@ const Dashboard = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Total Purchased</p>
               <p className="text-2xl font-bold text-gray-900">
-                {creditSummary ? creditSummary.total_purchased.toLocaleString() : '0'}
+                {stats ? stats.total_purchased.toLocaleString() : '0'}
               </p>
             </div>
           </div>
@@ -214,9 +156,9 @@ const Dashboard = () => {
               <span className="text-purple-600 font-semibold text-lg">H</span>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total Converted</p>
+              <p className="text-sm font-medium text-gray-600">Total Used</p>
               <p className="text-2xl font-bold text-gray-900">
-                {creditSummary ? creditSummary.total_converted.toLocaleString() : '0'}
+                {stats ? stats.total_used.toLocaleString() : '0'}
               </p>
             </div>
           </div>
@@ -226,7 +168,7 @@ const Dashboard = () => {
       <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div>
           <h2 className="text-lg font-medium text-gray-900 mb-4">Recent Activity</h2>
-          {recentActivity.length === 0 ? (
+          {ledger.length === 0 ? (
             <div className="bg-white shadow rounded-lg p-6 text-center">
               <div className="text-gray-500">
                 <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -239,22 +181,22 @@ const Dashboard = () => {
           ) : (
             <div className="bg-white shadow overflow-hidden sm:rounded-md">
               <ul className="divide-y divide-gray-200">
-                {recentActivity.map((entry) => (
+                {ledger.map((entry) => (
                   <li key={entry.id}>
                     <div className="px-4 py-4 sm:px-6">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center">
-                          <div className={`flex-shrink-0 h-10 w-10 rounded-full ${getActivityIconColor(entry.transaction_type)} flex items-center justify-center`}>
+                          <div className={`flex-shrink-0 h-10 w-10 rounded-full ${getActivityIconColor(entry.type)} flex items-center justify-center`}>
                             <span className="text-white font-medium text-sm">
-                              {formatTransactionType(entry.transaction_type).slice(0, 1)}
+                              {formatTransactionType(entry.type).slice(0, 1)}
                             </span>
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
-                              {formatTransactionType(entry.transaction_type)}
+                              {formatTransactionType(entry.type)}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {entry.description || `${Math.abs(entry.amount)} credits`}
+                              {Math.abs(entry.change)} credits
                             </div>
                           </div>
                         </div>

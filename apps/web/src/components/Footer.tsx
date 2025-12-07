@@ -45,7 +45,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Column 4: Resources & Newsletter */}
+          {/* Column 4: Resources */}
           <div className="space-y-4">
             <div className="text-sm font-medium text-white">Resources</div>
             <div className="space-y-2">
@@ -55,24 +55,6 @@ const Footer = () => {
               <Link to="/contact" className="block text-muted-xs hover:text-indigo-400 transition-colors">
                 Contact
               </Link>
-            </div>
-            <div className="mt-6">
-              <div className="text-sm font-medium text-white mb-2">Subscribe for updates</div>
-              <div className="flex">
-                <input
-                  type="email"
-                  placeholder="Enter email"
-                  className="input flex-1 rounded-r-none"
-                />
-                <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-r-md transition-colors">
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                  </svg>
-                </button>
-              </div>
-              <div className="text-muted-xs mt-1">
-                Subscribe for product updates and new credit packs.
-              </div>
             </div>
           </div>
         </div>
