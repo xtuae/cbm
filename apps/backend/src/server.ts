@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import express, { Request, Response } from 'express';
+import serverless from "serverless-http";
 import authRoutes from './routes/auth.js';
 import categoriesRoutes from './routes/categories.js';
 import creditPackRoutes from './routes/credit-packs.js';
@@ -54,13 +55,4 @@ app.get('/health', (req: Request, res: Response) => {
 // Global error handling middleware (must be last)
 app.use(errorHandler);
 
-// Handle uncaught exceptions and unhandled promise rejections
-process.on('uncaughtException', unhandledException);
-process.on('unhandledRejection', unhandledRejection);
-
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
-export default app;
+export const handler = serverless(app);
